@@ -1,0 +1,11 @@
+<RCC>
+    <qresource prefix="/">
+        <file>qtquickcontrols2.conf</file>
+        <file>EToolsDesktop.qml</file>
+        <file>SettingsDialog.qml</file>
+        <file>DrillReport.qml</file>
+        <file>BrdManager.qml</file>
+        <file>FileManager.qml</file>
+        <file>DocumentTree.qml</file>
+    </qresource>
+</RCC>

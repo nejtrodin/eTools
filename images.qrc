@@ -1,0 +1,11 @@
+<RCC>
+    <qresource prefix="/">
+        <file>images/open-iconic/svg/chevron-bottom.svg</file>
+        <file>images/open-iconic/svg/chevron-right.svg</file>
+        <file>images/eTools.png</file>
+        <file>images/open-iconic/svg/moon.svg</file>
+        <file>images/open-iconic/svg/sun.svg</file>
+        <file>images/open-iconic/svg/cog.svg</file>
+        <file>images/open-iconic/svg/file.svg</file>
+    </qresource>
+</RCC>
