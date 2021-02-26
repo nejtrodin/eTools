@@ -133,8 +133,7 @@ ColumnLayout {
 
         Component.onDestruction: {
             var fileList = []
-            var i;
-            for (i = 0; i < recentFilesModel.count; i++) {
+            for (var i = recentFilesModel.count - 1; i >= 0; --i) {
                 fileList.push(recentFilesModel.get(i).url)
             }
             settings.recentFileList = fileList
