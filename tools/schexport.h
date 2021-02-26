@@ -77,7 +77,7 @@ public:
     SchExport(QObject *parent = nullptr);
     Q_INVOKABLE void openFile(QString path);
     Q_INVOKABLE SheetSettingsModel *getSheetSettingsModel() { return mpSheetSettingsModel; }
-    Q_INVOKABLE void exportToPdf(QString filePath);
+    Q_INVOKABLE void exportToPdf(QString filePath, bool colorAsBlack);
 
 private:
     bool mValid = false;

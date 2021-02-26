@@ -91,7 +91,7 @@ void SchExport::openFile(QString path)
     mpSheetSettingsModel->setSettings(sheetSettings);
 }
 
-void SchExport::exportToPdf(QString filePath)
+void SchExport::exportToPdf(QString filePath, bool colorAsBlack)
 {
     QPrinter printer(QPrinter::HighResolution);
     QPainter painter;
@@ -99,6 +99,10 @@ void SchExport::exportToPdf(QString filePath)
     qreal scale = printer.resolution() / 25.4;
     Settings printSettings;
     printSettings.schScale = scale;
+
+    if (colorAsBlack)
+        for (int i = 0; i < 64; i++)
+            printSettings.themeColors[i] = Qt::black;
 
     int id = QFontDatabase::addApplicationFont(":/fonts/gost_b.ttf");
     QString gost_b = QFontDatabase::applicationFontFamilies(id).at(0);

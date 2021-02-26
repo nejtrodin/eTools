@@ -86,8 +86,8 @@ Item {
                                     currentIndex: orientationIdx
                                     onCurrentIndexChanged: orientationIdx = currentIndex
                                 }
-                                CheckBox {
-                                    text: qsTr("Print")
+                                Switch {
+                                    text: qsTr("Used")
                                     checked: used
                                     onCheckedChanged: used = checked
                                 }
@@ -101,11 +101,21 @@ Item {
             }
         }  // sheet settings
 
+        Frame {
+            ColumnLayout {
+                Switch {
+                    id: colorAsBlackSwitch
+                    text: qsTr("All colors as black")
+                    checked: true
+                }
+            }
+        }
+
         Button {
             Layout.fillWidth: true
             text: qsTr("Export")
             font.capitalization: Font.MixedCase
-            onClicked: schExport.exportToPdf(outFilePath.text)
+            onClicked: schExport.exportToPdf(outFilePath.text, colorAsBlackSwitch.checked)
         }
     }
 
