@@ -4,7 +4,8 @@
 #include "eagle/eboard.h"
 #include <QtCore>
 
-struct DrillEntry {
+struct DrillEntry
+{
     double hole;
     double border;
     bool plate;
@@ -12,18 +13,19 @@ struct DrillEntry {
     QVector<QPointF> positions;
 };
 
-class DrillReporter : public QObject {
+class DrillReporter : public QObject
+{
     Q_OBJECT
 
 public:
-    DrillReporter(QObject* parent = nullptr);
+    DrillReporter(QObject *parent = nullptr);
     QVector<DrillEntry> getDrillTable(EBoard board);
 
 signals:
     void signalReport(QString report);
 
 public slots:
-    void getReport(QString schFilePath);
+    void getReport(QString brdFilePath);
 
 private:
     QVector<DrillEntry> drillTable;

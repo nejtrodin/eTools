@@ -1,11 +1,11 @@
 #ifndef EPLAIN_H
 #define EPLAIN_H
 
-#include "ecommon.h"
+#include "common/ecommon.h"
 
-class EPlain {
+class EBrdPlain {
 public:
-    EPlain();
+    EBrdPlain();
     void appendHole(Hole hole);
     QVector<Hole> getHoles() { return eHoles; }
 

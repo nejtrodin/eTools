@@ -1,12 +1,27 @@
-import QtQuick 2.0
-import QtQuick.Controls 2.2
-import QtQuick.Controls.Material 2.0
+import QtQuick 2.12
+import QtQuick.Controls 2.12
+import QtQuick.Controls.Material 2.12
 import Qt.labs.settings 1.0
 import QtQuick.Layouts 1.12
+// qt6
+import QtQml.Models 2.0
 
-import eFileInfo 1.0
+import ETools 1.0
 
 ColumnLayout {
+    id: fileManager
+    signal selectFile(var type, var path, var info)
+    signal openFile(var type, var path, var info)
+
+    // info about selecteed file
+    Item {
+        id: currentFile
+        property string name: ''
+        property string path: ''
+        property string url: ''
+        property string info: ''
+        property var type: EFileInfo.NotFound
+    }
 
     Settings {
         id: settings
@@ -34,7 +49,15 @@ ColumnLayout {
         clip: true
         DocumentTree {
             id: documentTree
-            onOpenFile: appendFile(path)
+            onSelectFile: {
+                setCurrentFile(path)
+                fileManager.selectFile(currentFile.type, currentFile.path, currentFile.info)
+            }
+            onOpenFile: {
+                setCurrentFile(path)
+                currentFileToRecent()
+                fileManager.openFile(currentFile.type, currentFile.path, currentFile.info)
+            }
         }
     }
 
@@ -61,7 +84,7 @@ ColumnLayout {
 
         property var recentFileList: []
 
-        highlight: Rectangle { color: Material.accent }
+        highlight: Rectangle { color: "lightslategrey" }
         highlightFollowsCurrentItem: true
 
         delegate: Item {
@@ -78,7 +101,13 @@ ColumnLayout {
                 anchors.fill: parent
                 onClicked: {
                     recentFilesView.currentIndex = model.index
-                    fileSelect(model.type, model.path, model.info)
+                    setCurrentFile(model.url)
+                    selectFile(currentFile.type, currentFile.path, currentFile.info)
+                }
+                onDoubleClicked: {
+                    recentFilesView.currentIndex = model.index
+                    setCurrentFile(model.url)
+                    openFile(currentFile.type, currentFile.path, currentFile.info)
                 }
             }
         }
@@ -86,13 +115,20 @@ ColumnLayout {
 
     ListModel {
         id: recentFilesModel
-        dynamicRoles: true        
+        dynamicRoles: true
 
         property var fileList: []
 
         Component.onCompleted: {
             var fileList = settings.recentFileList
-            fileList.forEach(function(item, i, arr) { appendFile(item) })
+
+            fileList.forEach(function(item, i, arr) {
+                setCurrentFile(item)
+                currentFileToRecent()
+                // select last file
+                if (i === (arr.length - 1))
+                    selectFile(currentFile.type, currentFile.path, currentFile.info)
+            })
         }
 
         Component.onDestruction: {
@@ -105,26 +141,31 @@ ColumnLayout {
         }
     }
 
-    signal fileSelect(var type, var path, var info)
+    function setCurrentFile(fileUrl) {
+        if (currentFile.url !== fileUrl) {
+            eFileInfo.checkFile(fileUrl)
 
-    function appendFile(fileUrl) {
-        eFileInfo.checkFile(fileUrl)
+            currentFile.url = fileUrl
+            currentFile.type = eFileInfo.getType()
+            currentFile.path = eFileInfo.getFilePath()
+            currentFile.name = currentFile.path.slice(
+                        Math.max(currentFile.path.lastIndexOf('/'),
+                                 currentFile.path.lastIndexOf('\\')) + 1)
+            currentFile.info = eFileInfo.getInfo()
+        }
+    }
 
-        var filePath = eFileInfo.getFilePath()
-        var name = filePath.slice(
-                    Math.max(filePath.lastIndexOf('/'), filePath.lastIndexOf('\\')) + 1)
-        recentFilesModel.insert(0,
-                                {text: name,
-                                 type: eFileInfo.getType(),
-                                 path: filePath,
-                                 url: fileUrl,
-                                 info: eFileInfo.getInfo()}
+    function currentFileToRecent() {
+        recentFilesModel.insert(0, {text: currentFile.name,
+                                    url: currentFile.url}
                                 )
         recentFilesView.currentIndex = 0;
         if (recentFilesModel.count > 10)
-            recentFilesModel.remove(10, 1)        
+            recentFilesModel.remove(10, 1)
+    }
 
-        fileSelect(eFileInfo.getType(), filePath, eFileInfo.getInfo())
+    function selectCurrentFile() {
+        fileSelected(eFileInfo.getType(), filePath, eFileInfo.getInfo())
     }
 
     function setProjectPaths(paths) {

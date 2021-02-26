@@ -4,16 +4,13 @@
 #include <QObject>
 #include <QUrl>
 
-class EFileInfo : public QObject {
+class EFileInfo : public QObject
+{
     Q_OBJECT
 public:
-    explicit EFileInfo(QObject* parent = nullptr);
+    explicit EFileInfo(QObject *parent = nullptr);
 
-    enum FileType { NotFound,
-        Board,
-        Schematic,
-        Library,
-        Other };
+    enum FileType { NotFound, Board, Schematic, Library, Other };
     Q_ENUM(FileType)
 
     Q_INVOKABLE void checkFile(QString path);

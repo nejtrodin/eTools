@@ -2,6 +2,8 @@
 #define BRDPARSER_H
 
 #include "eboard.h"
+#include "eparser.h"
+#include "brd/ebrdvia.h"
 #include <QDomDocument>
 #include <QString>
 
@@ -9,21 +11,19 @@ class ELibrary;
 class EPackage;
 class EElement;
 class ESignal;
-class EPlain;
+class EBrdPlain;
 
-class BrdParser {
+class BrdParser : EParser {
 public:
     BrdParser();
     bool parse(QString filePath, ELibrary* library, EBoard* board);
 
 private:
-    bool parseLibrary(QDomElement libraryElement, ELibrary* library);
-    EPlain parsePlain(QDomElement plainElement);
-    EElement parseElement(QDomElement elementElement, ELibrary* library);
-    EPackage parsePackage(QDomElement packageElement, QString libraryName);
+    EBrdPlain parsePlain(QDomElement plainElement);
+//    EElement parseElement(QDomElement elementElement, ELibrary* library);
     ESignal parseSignal(QDomElement signalElement);
 
-    Via parseVia(QDomElement viaElement, bool* ok);
+    EBrdVia parseVia(QDomElement viaElement, bool* ok);
 };
 
 #endif // BRDPARSER_H

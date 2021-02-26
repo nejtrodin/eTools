@@ -31,7 +31,8 @@ public:
     };
 
     explicit DocumentTreeModel(QObject *parent = nullptr);
-    QHash<int, QByteArray> roleNames() const {
+    QHash<int, QByteArray> roleNames() const
+    {
         QHash<int, QByteArray> roles;
         roles[NameRole] = "name";
         roles[PathRole] = "path";
@@ -46,7 +47,6 @@ public:
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
     int rowCount(const QModelIndex &parent = QModelIndex()) const;
 
-
 public slots:
     void openItem(int numIndex);
     void closeItem(int numIndex);
@@ -54,7 +54,7 @@ public slots:
 private:
     void resetItems();
 
-    QList<DocumentTreeItem*> items;
+    QList<DocumentTreeItem *> items;
     QStringList projectPathList;
 };
 

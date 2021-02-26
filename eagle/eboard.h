@@ -1,8 +1,8 @@
 #ifndef EBOARD_H
 #define EBOARD_H
 
-#include "ecommon.h"
-#include "edesignrules.h"
+#include "common/ecommon.h"
+#include "brd/edesignrules.h"
 #include "eelement.h"
 #include "eplain.h"
 #include "esignal.h"
@@ -14,13 +14,13 @@ public:
     QVector<EElement> getElements() { return eElements; }
     void appendSignal(ESignal eSignal);
     QVector<ESignal> getSignals() { return eSignals; }
-    void setPlain(EPlain ePlain);
-    EPlain getPlain() { return ePlain; }
+    void setPlain(EBrdPlain ePlain);
+    EBrdPlain getPlain() { return ePlain; }
 
 private:
     QVector<EElement> eElements;
     QVector<ESignal> eSignals;
-    EPlain ePlain;
+    EBrdPlain ePlain;
 };
 
 #endif // EBOARD_H

@@ -2,10 +2,16 @@ import QtQuick 2.0
 import QtQuick.Controls 2.5
 import QtQuick.Controls.Material 2.0
 import QtQuick.Layouts 1.4
+import ETools 1.0
 
 Item {
     property string filePath: ""
     property string info: ""
+
+    function setFilePath (path) {
+        filePath = path
+        drillReporter.getReport(path)
+    }
 
     ColumnLayout {
         id: mainLayout
@@ -25,15 +31,15 @@ Item {
         }
 
         DrillReport {
-            id: drillReport
+            id: drillReportItem
             Layout.fillWidth: true
             Layout.fillHeight: true
             Layout.margins: 5
         }
     }
 
-    function setDrillReport (report) {
-        drillReport.report = report
+    DrillReporter {
+        id: drillReporter
+        onSignalReport: drillReportItem.report = report
     }
-
 }

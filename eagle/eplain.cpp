@@ -1,10 +1,10 @@
 #include "eplain.h"
 
-EPlain::EPlain()
+EBrdPlain::EBrdPlain()
 {
 }
 
-void EPlain::appendHole(Hole hole)
+void EBrdPlain::appendHole(Hole hole)
 {
     eHoles.append(hole);
 }

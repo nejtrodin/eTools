@@ -14,7 +14,7 @@ void EBoard::appendSignal(ESignal eSignal)
     eSignals.append(eSignal);
 }
 
-void EBoard::setPlain(EPlain ePlain)
+void EBoard::setPlain(EBrdPlain ePlain)
 {
     this->ePlain = ePlain;
 }

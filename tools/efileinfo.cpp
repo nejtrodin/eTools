@@ -4,10 +4,7 @@
 #include <QFile>
 #include <QXmlStreamReader>
 
-EFileInfo::EFileInfo(QObject* parent)
-    : QObject(parent)
-{
-}
+EFileInfo::EFileInfo(QObject *parent) : QObject(parent) { }
 
 void EFileInfo::checkFile(QString path)
 {
@@ -33,11 +30,11 @@ void EFileInfo::checkFilePath(QString path)
                 xmlReader.setDevice(&xmlFile);
                 type = Other;
 
-                if (xmlReader.readNextStartElement()
-                    && xmlReader.name() == QLatin1String("eagle")
+                if (xmlReader.readNextStartElement() && xmlReader.name() == QLatin1String("eagle")
                     && xmlReader.attributes().hasAttribute(QLatin1String("version"))) {
-                    report.append(tr("\nEagle Cad file. Version: %1.")
-                                      .arg(xmlReader.attributes().value(QLatin1String("version"))));
+                    report.append(
+                            tr("\nEagle Cad file. Version: %1.")
+                                    .arg(xmlReader.attributes().value(QLatin1String("version"))));
 
                     if (xmlReader.readNextStartElement()
                         && xmlReader.name() == QLatin1String("drawing")) {

@@ -1,11 +1,13 @@
-import QtQuick 2.0
-import QtQuick.Controls 2.0
-import QtQuick.Controls.Material 2.0
-import QtGraphicalEffects 1.12
+import QtQuick 2.12
+import QtQuick.Controls 2.12
+import QtQuick.Controls.Material 2.12
+
+import ETools 1.0
 
 // За основу взят код из http://qt-way-notes.blogspot.com/2010/07/tree-model-qml.html?m=1
 
 ListView {
+    signal selectFile(var path)
     signal openFile(var path)
 
     id: documentTree
@@ -14,7 +16,7 @@ ListView {
 
     model: documentTreeModel
 
-    highlight: Rectangle { color: Material.accent  }
+    highlight: Rectangle { color: "lightslategrey" }
     highlightFollowsCurrentItem: true
 
     delegate: Item {
@@ -22,21 +24,12 @@ ListView {
         height: 32
         width: documentTree.width
 
-        //Полоска для отделения элементов друг от друга
-        Rectangle {
-            height: 1
-            anchors.top: parent.top
-            anchors.left: parent.left
-            anchors.right: parent.right
-            color: "#d0d0d0"
-        }
-
         //"Отбой" слева элементов-потомков
         Item {
             id: levelMarginElement
             //Начиная с 6 уровня вложенности не сдвигаем потомков,
             //так как иначе можно получить очень широкое окно
-            width: (level>5?6:level)*32 + 5
+            width: (level>5?6:level)*24 + 5
             anchors.left: parent.left
         }
 
@@ -48,24 +41,19 @@ ListView {
             anchors.verticalCenter: wrapper.verticalCenter
             height: 20
             state: "leafNode"
+
             Image {
                 id: triangleOpenImage
                 sourceSize.width: parent.height
                 sourceSize.height: parent.height
 
-                //Отлавливаем нажатие мышкой и открываем/закрываем элемент
+                // open/close item
                 MouseArea {
                     anchors.fill: parent
                     onClicked: { (isOpened) ?
                                  documentTreeModel.closeItem(index) :
                                  documentTreeModel.openItem(index) }
                 }
-            }
-
-            ColorOverlay {
-                anchors.fill: triangleOpenImage
-                source: triangleOpenImage
-                color: Material.theme == Material.Dark ? "#ffffffff" : "#00000000"
             }
 
             states: [
@@ -122,10 +110,27 @@ ListView {
 
             MouseArea {
                 anchors.fill: parent
-                onClicked: documentTree.currentIndex = model.index
-                onDoubleClicked: openFile(path)
+                onClicked: {
+                    documentTree.currentIndex = model.index
+                    selectFile(path)
+                }
+                onDoubleClicked: {
+                    documentTree.currentIndex = model.index
+                    if (hasChildren) {
+                        (isOpened)
+                                ? documentTreeModel.closeItem(index)
+                                : documentTreeModel.openItem(index)
+                    }
+                    else {
+                        openFile(path)
+                    }
+                }
             }
         }
+    }
+
+    DocumentTreeModel {
+        id: documentTreeModel
     }
 
     function setProjectPaths(paths) {

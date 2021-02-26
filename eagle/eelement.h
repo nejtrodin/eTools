@@ -3,10 +3,11 @@
 
 #include "epackage.h"
 #include <QtCore>
+#include <QPainter>
 
 class EElement {
 public:
-    EElement(); // !!!
+    EElement() { }
     EElement(QString name, EPackage package, qreal xPos, qreal yPos, qreal angle = 0,
         bool mirror = false);
     const QPointF position() { return m_position; }

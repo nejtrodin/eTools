@@ -3,9 +3,11 @@
 #include <QUrl>
 
 #include "eagle/brdparser.h"
-#include "eagle/ecommon.h"
+#include "eagle/common/ecommon.h"
+#include "eagle/brd/ebrdpad.h"
+#include "eagle/brd/ebrdvia.h"
 #include "eagle/eelement.h"
-#include "eagle/elibrary.h"
+#include "eagle/lbr/elibrary.h"
 #include "eagle/esignal.h"
 
 bool compare(double value1, double value2, quint8 precision)
@@ -13,10 +15,7 @@ bool compare(double value1, double value2, quint8 precision)
     return std::abs(value1 - value2) < std::pow(10, -precision);
 }
 
-DrillReporter::DrillReporter(QObject* parent)
-    : QObject(parent)
-{
-}
+DrillReporter::DrillReporter(QObject *parent) : QObject(parent) { }
 
 QVector<DrillEntry> DrillReporter::getDrillTable(EBoard board)
 {
@@ -24,37 +23,37 @@ QVector<DrillEntry> DrillReporter::getDrillTable(EBoard board)
 
     EElement element;
     foreach (element, board.getElements()) {
-        QVector<Pad> pads = element.package().getPads();
-        QVector<Pad>::const_iterator padIterator;
-        for (padIterator = pads.begin(); padIterator != pads.end(); ++padIterator)
+        QVector<EBrdPad> pads = element.package().getPads();
+        QVector<EBrdPad>::const_iterator padIterator;
+        for (padIterator = pads.constBegin(); padIterator != pads.constEnd(); ++padIterator)
             appendDrill(padIterator->getDrill(), padIterator->getTopDiameter(), true,
-                padIterator->getPosition());
+                        padIterator->getPosition());
 
         QVector<Hole> holes = element.package().getHoles();
         QVector<Hole>::const_iterator holeIterator;
-        for (holeIterator = holes.begin(); holeIterator != holes.end(); ++holeIterator)
+        for (holeIterator = holes.constBegin(); holeIterator != holes.constEnd(); ++holeIterator)
             appendDrill(holeIterator->drill, 0, false, holeIterator->pos);
     }
 
     ESignal eSignal;
     foreach (eSignal, board.getSignals()) {
-        QVector<Via> vias = eSignal.getVias();
-        QVector<Via>::const_iterator viaIterator;
-        for (viaIterator = vias.begin(); viaIterator != vias.end(); ++viaIterator)
+        QVector<EBrdVia> vias = eSignal.getVias();
+        QVector<EBrdVia>::const_iterator viaIterator;
+        for (viaIterator = vias.constBegin(); viaIterator != vias.constEnd(); ++viaIterator)
             appendDrill(viaIterator->getDrill(), viaIterator->getOuterDiameter(), true,
-                viaIterator->getPosition());
+                        viaIterator->getPosition());
     }
 
-    EPlain ePlain = board.getPlain();
+    EBrdPlain ePlain = board.getPlain();
     QVector<Hole> holes = ePlain.getHoles();
     QVector<Hole>::const_iterator holeIterator;
-    for (holeIterator = holes.begin(); holeIterator != holes.end(); ++holeIterator)
+    for (holeIterator = holes.constBegin(); holeIterator != holes.constEnd(); ++holeIterator)
         appendDrill(holeIterator->drill, 0, false, holeIterator->pos);
 
     return drillTable;
 }
 
-void DrillReporter::getReport(QString schFilePath)
+void DrillReporter::getReport(QString brdFilePath)
 {
     EBoard board;
     ELibrary library;
@@ -62,7 +61,7 @@ void DrillReporter::getReport(QString schFilePath)
 
     QString report;
 
-    bool parseResult = parser.parse(schFilePath, &library, &board);
+    bool parseResult = parser.parse(brdFilePath, &library, &board);
     if (parseResult) {
         DrillReporter drillReporter;
         QVector<DrillEntry> table = drillReporter.getDrillTable(board);
@@ -71,7 +70,8 @@ void DrillReporter::getReport(QString schFilePath)
                  "table, th, td { border: 1px solid black; border-collapse: collapse;}"
                  "</style>"
                  "<div><center><table border='1' cellpadding='5' align='center'>"
-                 "<tr><th>Диам. отв. мм</th><th>Размер конт. площадки</th><th>Наличие металлизации</th><th>Кол.</th></tr>";
+                 "<tr><th>Диам. отв. мм</th><th>Размер конт. площадки</th>"
+                 "<th>Наличие металлизации</th><th>Кол.</th></tr>";
 
         DrillEntry row;
         foreach (row, table) {
@@ -93,7 +93,7 @@ void DrillReporter::getReport(QString schFilePath)
 
         report.append("</table></center></div>");
     } else {
-        report = QString("Can't parse file: %1").arg(schFilePath);
+        report = QString("Can't parse file: %1").arg(brdFilePath);
     }
 
     emit signalReport(report);

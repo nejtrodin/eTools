@@ -2,36 +2,39 @@
 #define EPACKAGE_H
 
 #include "QtCore"
-#include "ecommon.h"
+#include "common/ecommon.h"
+#include "brd/ebrdpad.h"
 
 class EPackage {
 public:
     EPackage();
-    EPackage(QString name, QString libraryName);
-    bool isNull() { return m_nullFlag; }
-    QString name() const { return m_name; }
-    QString libraryName() const { return m_libraryName; }
+    EPackage(const QString &name, const QString &libraryName);
     QPointF getTopLeft() const { return QPointF(m_boundX1, m_boundY2); }
     QPointF getBottomRight() const { return QPointF(m_boundX2, m_boundY1); }
-    QVector<Wire> getWires() const { return wireVector; }
-    QVector<Pad> getPads() const { return padVector; }
-    QVector<Hole> getHoles() const { return holesVector; }
+//    QVector<Wire> getWires() const { return wireVector; }
+    QVector<EBrdPad> getPads() const { return mPads; }
+    QVector<Hole> getHoles() const { return mHoles; }
 
-    void appendWire(double x1, double y1, double x2, double y2, double width, int layer);
+//    void appendWire(Wire wire);
     void appendPad(double x, double y, double drill, double diameter);
     void appendHole(double x, double y, double drill);
 
+    QString getName() const {return mName;}
+    void setName(const QString &value) {mName = value;}
+
+    QString getLibraryName() const {return mLibraryName;}
+    void setLibraryName(const QString &value) {mLibraryName = value;}
+
 private:
-    bool m_nullFlag;
-    QString m_name;
-    QString m_libraryName;
+    QString mName;
+    QString mLibraryName;
     qreal m_boundX1;
     qreal m_boundX2;
     qreal m_boundY1;
     qreal m_boundY2;
-    QVector<Wire> wireVector;
-    QVector<Pad> padVector;
-    QVector<Hole> holesVector;
+//    QVector<Wire> wireVector;
+    QVector<EBrdPad> mPads;
+    QVector<Hole> mHoles;
 };
 
 #endif // EPACKAGE_H

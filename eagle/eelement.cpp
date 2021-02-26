@@ -1,9 +1,5 @@
 #include "eelement.h"
 
-EElement::EElement()
-{
-}
-
 EElement::EElement(QString name, EPackage package, qreal xPos, qreal yPos, qreal angle, bool mirror)
 {
     m_name = name;

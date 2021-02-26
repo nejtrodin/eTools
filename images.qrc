@@ -7,5 +7,6 @@
         <file>images/open-iconic/svg/sun.svg</file>
         <file>images/open-iconic/svg/cog.svg</file>
         <file>images/open-iconic/svg/file.svg</file>
+        <file>images/open-iconic/svg/arrow-circle-left.svg</file>
     </qresource>
 </RCC>

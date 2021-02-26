@@ -4,16 +4,15 @@
 
 #include <QDebug>
 
-class DocumentTreeItem {
+class DocumentTreeItem
+{
 public:
     DocumentTreeItem(QString path, DocumentTreeModel::NodeType type, int level)
-        : path(path)
-        , type(type)
-        , level(level)
+        : path(path), type(type), level(level)
     {
-        if (type == DocumentTreeModel::LibrarySectionNode ||
-                type == DocumentTreeModel::ProjectSectionNode ||
-                type == DocumentTreeModel::FolderNode)
+        if (type == DocumentTreeModel::LibrarySectionNode
+            || type == DocumentTreeModel::ProjectSectionNode
+            || type == DocumentTreeModel::FolderNode)
             hasChildren = true;
         else
             hasChildren = false;
@@ -37,8 +36,7 @@ public:
     int level; // уровень вложенности. Используется для расчета сдвига элементов в дереве
 };
 
-DocumentTreeModel::DocumentTreeModel(QObject* parent)
-    : QAbstractListModel(parent)
+DocumentTreeModel::DocumentTreeModel(QObject *parent) : QAbstractListModel(parent)
 {
     resetItems();
 }
@@ -50,19 +48,19 @@ void DocumentTreeModel::setProjectPaths(QString paths)
     paths.replace("$HOME", qgetenv("HOME"));
 #endif
 
-    projectPathList = paths.split(';', QString::SkipEmptyParts);
+    projectPathList = paths.split(';', Qt::SkipEmptyParts);
 
     beginResetModel();
     resetItems();
     endResetModel();
 }
 
-QVariant DocumentTreeModel::data(const QModelIndex& index, int role) const
+QVariant DocumentTreeModel::data(const QModelIndex &index, int role) const
 {
     if (index.row() < 0 || index.row() >= items.count())
         return QVariant();
 
-    DocumentTreeItem* item = items.at(index.row());
+    DocumentTreeItem *item = items.at(index.row());
     switch (role) {
     case Qt::DisplayRole:
     case NameRole:
@@ -82,7 +80,7 @@ QVariant DocumentTreeModel::data(const QModelIndex& index, int role) const
     }
 }
 
-int DocumentTreeModel::rowCount(const QModelIndex& parent) const
+int DocumentTreeModel::rowCount(const QModelIndex &parent) const
 {
     Q_UNUSED(parent)
     return items.size();
@@ -93,7 +91,7 @@ void DocumentTreeModel::openItem(int numIndex)
     if (numIndex > (items.size() - 1))
         return;
 
-    DocumentTreeItem* parentItem = items[numIndex];
+    DocumentTreeItem *parentItem = items[numIndex];
     int row = numIndex + 1;
 
     if (parentItem->isOpened)
@@ -105,8 +103,8 @@ void DocumentTreeModel::openItem(int numIndex)
 
     if (parentItem->type == DocumentTreeModel::ProjectSectionNode) {
         foreach (QString path, projectPathList) {
-            auto childrenItem = new DocumentTreeItem(path,
-                DocumentTreeModel::FolderNode, parentItem->level + 1);
+            auto childrenItem = new DocumentTreeItem(path, DocumentTreeModel::FolderNode,
+                                                     parentItem->level + 1);
             beginInsertRows(QModelIndex(), row, row);
             items.insert(row++, childrenItem);
             endInsertRows();
@@ -116,11 +114,11 @@ void DocumentTreeModel::openItem(int numIndex)
     else if (parentItem->type == DocumentTreeModel::FolderNode) {
         QDir dir(parentItem->path);
         if (dir.exists()) {
-            QFileInfoList dirList = dir.entryInfoList(QDir::Dirs
-                | QDir::AllDirs | QDir::NoSymLinks | QDir::NoDotAndDotDot);
+            QFileInfoList dirList = dir.entryInfoList(QDir::Dirs | QDir::AllDirs | QDir::NoSymLinks
+                                                      | QDir::NoDotAndDotDot);
             foreach (QFileInfo dirInfo, dirList) {
-                auto childrenItem = new DocumentTreeItem(dirInfo.filePath(),
-                    DocumentTreeModel::FolderNode, parentItem->level + 1);
+                auto childrenItem = new DocumentTreeItem(
+                        dirInfo.filePath(), DocumentTreeModel::FolderNode, parentItem->level + 1);
                 beginInsertRows(QModelIndex(), row, row);
                 items.insert(row++, childrenItem);
                 endInsertRows();
@@ -131,20 +129,23 @@ void DocumentTreeModel::openItem(int numIndex)
             foreach (QFileInfo fileInfo, fileList) {
                 eFileInfo.checkFilePath(fileInfo.filePath());
                 if (eFileInfo.getType() == EFileInfo::Board) {
-                    auto childrenItem = new DocumentTreeItem(fileInfo.filePath(),
-                        DocumentTreeModel::BoardNode, parentItem->level + 1);
+                    auto childrenItem =
+                            new DocumentTreeItem(fileInfo.filePath(), DocumentTreeModel::BoardNode,
+                                                 parentItem->level + 1);
                     beginInsertRows(QModelIndex(), row, row);
                     items.insert(row++, childrenItem);
                     endInsertRows();
                 } else if (eFileInfo.getType() == EFileInfo::Schematic) {
                     auto childrenItem = new DocumentTreeItem(fileInfo.filePath(),
-                        DocumentTreeModel::SchematicNode, parentItem->level + 1);
+                                                             DocumentTreeModel::SchematicNode,
+                                                             parentItem->level + 1);
                     beginInsertRows(QModelIndex(), row, row);
                     items.insert(row++, childrenItem);
                     endInsertRows();
                 } else if (eFileInfo.getType() == EFileInfo::Library) {
                     auto childrenItem = new DocumentTreeItem(fileInfo.filePath(),
-                        DocumentTreeModel::LibraryNode, parentItem->level + 1);
+                                                             DocumentTreeModel::LibraryNode,
+                                                             parentItem->level + 1);
                     beginInsertRows(QModelIndex(), row, row);
                     items.insert(row++, childrenItem);
                     endInsertRows();
@@ -170,7 +171,7 @@ void DocumentTreeModel::closeItem(int numIndex)
     // delete all elements with level > current level
     for (; row < items.size() && (items[row]->level > items[numIndex]->level);) {
         beginRemoveRows(QModelIndex(), row, row);
-        DocumentTreeItem* item = items[row];
+        DocumentTreeItem *item = items[row];
         items.removeAt(row);
         delete item;
         endRemoveRows();

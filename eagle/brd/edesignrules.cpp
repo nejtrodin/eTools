@@ -33,12 +33,12 @@ bool EDesignRules::parse(QDomElement element)
                     this->rvViaOuter = value;
             } else if (stParamName == "rlMinViaOuter") {
                 bool valueParseResult;
-                double value = convertSizeTextToMilimeters(stParamValue, &valueParseResult);
+                double value = ECommon::textSizeToMilimeters(stParamValue, &valueParseResult);
                 if (valueParseResult)
                     this->rlMinViaOuter = value;
             } else if (stParamName == "rlMaxViaOuter") {
                 bool valueParseResult;
-                double value = convertSizeTextToMilimeters(stParamValue, &valueParseResult);
+                double value = ECommon::textSizeToMilimeters(stParamValue, &valueParseResult);
                 if (valueParseResult)
                     this->rlMaxViaOuter = value;
             } else if (stParamName == "rvViaInner") {
@@ -48,12 +48,12 @@ bool EDesignRules::parse(QDomElement element)
                     this->rvViaInner = value;
             } else if (stParamName == "rlMinViaInner") {
                 bool valueParseResult;
-                double value = convertSizeTextToMilimeters(stParamValue, &valueParseResult);
+                double value = ECommon::textSizeToMilimeters(stParamValue, &valueParseResult);
                 if (valueParseResult)
                     this->rlMinViaInner = value;
             } else if (stParamName == "rlMaxViaInner") {
                 bool valueParseResult;
-                double value = convertSizeTextToMilimeters(stParamValue, &valueParseResult);
+                double value = ECommon::textSizeToMilimeters(stParamValue, &valueParseResult);
                 if (valueParseResult)
                     this->rlMaxViaInner = value;
             } else if (stParamName == "rvPadTop") {
@@ -73,32 +73,32 @@ bool EDesignRules::parse(QDomElement element)
                     this->rvPadBottom = value;
             } else if (stParamName == "rlMinPadTop") {
                 bool valueParseResult;
-                double value = convertSizeTextToMilimeters(stParamValue, &valueParseResult);
+                double value = ECommon::textSizeToMilimeters(stParamValue, &valueParseResult);
                 if (valueParseResult)
                     this->rlMinPadTop = value;
             } else if (stParamName == "rlMaxPadTop") {
                 bool valueParseResult;
-                double value = convertSizeTextToMilimeters(stParamValue, &valueParseResult);
+                double value = ECommon::textSizeToMilimeters(stParamValue, &valueParseResult);
                 if (valueParseResult)
                     this->rlMaxPadTop = value;
             } else if (stParamName == "rlMinPadInner") {
                 bool valueParseResult;
-                double value = convertSizeTextToMilimeters(stParamValue, &valueParseResult);
+                double value = ECommon::textSizeToMilimeters(stParamValue, &valueParseResult);
                 if (valueParseResult)
                     this->rlMinPadInner = value;
             } else if (stParamName == "rlMaxPadInner") {
                 bool valueParseResult;
-                double value = convertSizeTextToMilimeters(stParamValue, &valueParseResult);
+                double value = ECommon::textSizeToMilimeters(stParamValue, &valueParseResult);
                 if (valueParseResult)
                     this->rlMaxPadInner = value;
             } else if (stParamName == "rlMinPadBottom") {
                 bool valueParseResult;
-                double value = convertSizeTextToMilimeters(stParamValue, &valueParseResult);
+                double value = ECommon::textSizeToMilimeters(stParamValue, &valueParseResult);
                 if (valueParseResult)
                     this->rlMinPadBottom = value;
             } else if (stParamName == "rlMaxPadBottom") {
                 bool valueParseResult;
-                double value = convertSizeTextToMilimeters(stParamValue, &valueParseResult);
+                double value = ECommon::textSizeToMilimeters(stParamValue, &valueParseResult);
                 if (valueParseResult)
                     this->rlMaxPadBottom = value;
             }
