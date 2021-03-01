@@ -108,6 +108,11 @@ Item {
                     text: qsTr("All colors as black")
                     checked: true
                 }
+                Switch {
+                    id: pageBorderSwitch
+                    text: qsTr("Draw border")
+                    checked: true
+                }
             }
         }
 
@@ -115,7 +120,8 @@ Item {
             Layout.fillWidth: true
             text: qsTr("Export")
             font.capitalization: Font.MixedCase
-            onClicked: schExport.exportToPdf(outFilePath.text, colorAsBlackSwitch.checked)
+            onClicked: schExport.exportToPdf(outFilePath.text, colorAsBlackSwitch.checked,
+                                             pageBorderSwitch.checked)
         }
     }
 

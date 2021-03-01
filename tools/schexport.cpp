@@ -2,6 +2,8 @@
 #include <QtPrintSupport/QPrinter>
 #include <QFontDatabase>
 
+const qreal borderWidth = 0.25;
+
 SheetSettingsModel::SheetSettingsModel(QObject *parent) : QAbstractTableModel(parent) { }
 
 QVariant SheetSettingsModel::data(const QModelIndex &index, int role) const
@@ -91,7 +93,7 @@ void SchExport::openFile(QString path)
     mpSheetSettingsModel->setSettings(sheetSettings);
 }
 
-void SchExport::exportToPdf(QString filePath, bool colorAsBlack)
+void SchExport::exportToPdf(QString filePath, bool colorAsBlack, bool addBorder)
 {
     QPrinter printer(QPrinter::HighResolution);
     QPainter painter;
@@ -148,13 +150,25 @@ void SchExport::exportToPdf(QString filePath, bool colorAsBlack)
             } else
                 printer.newPage();
 
+            QRectF pageRect = printer.pageRect(QPrinter::DevicePixel);
+            // draw sheet
             painter.save();
-            // Use the painter to draw on the page.
-            QRect r(painter.viewport());
-            painter.translate(0, r.height());
+            painter.translate(0, pageRect.height());
             mESchematic.paint(&painter, &printSettings, sheetPage);
-
             painter.restore();
+
+            if (addBorder) {
+                painter.save();
+                QPen pen = painter.pen();
+                pen.setColor(Qt::black);
+                pen.setWidth(borderWidth * scale);
+                painter.setPen(pen);
+                painter.drawRect(pageRect.adjusted(0.5 * borderWidth * scale,
+                                                   0.5 * borderWidth * scale,
+                                                   -0.5 * borderWidth * scale,
+                                                   -0.5 * borderWidth * scale));
+                painter.restore();
+            }
 
             printPage++;
         }
