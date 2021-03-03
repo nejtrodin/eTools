@@ -23,7 +23,7 @@ SchViewItem::SchViewItem(QQuickItem *parent) : QQuickPaintedItem(parent)
 
 bool SchViewItem::openFile(QString path)
 {
-    bool ok = mpESchematic->openFile(path);
+    bool ok = mpESchematic->openFile(path, &mSettings);
     if (ok) {
         mEmptyFlag = false;
         mSheetList = mpESchematic->sheetList();

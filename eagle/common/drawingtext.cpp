@@ -1,7 +1,7 @@
 #include "drawingtext.h"
 
-DrawingText::DrawingText(QString text, QPointF position, qreal size, int angle, EAlign align,
-                         int layer, int distance)
+DrawingText::DrawingText(QPointF position, qreal size, int angle, EAlign align, int layer,
+                         QString text, int distance)
     : mText(text),
       mPosition(position),
       mSize(size),
@@ -56,67 +56,70 @@ void DrawingText::mirror()
             mAlign = AlignBottomRight;
     }
     mPosition.rx() *= -1;
+    mMirrorFlag = !mMirrorFlag;
 }
 
 void DrawingText::paint(QPainter *painter, Settings *settings, bool readable)
 {
-    painter->save();
+    if (settings->layers.contains(mLayer) && settings->layers[mLayer].visible) {
+        painter->save();
 
-    painter->setPen(settings->getColor(mLayer));
-    QFont font = settings->schFont;
-    font.setPixelSize(mSize * settings->textScale * settings->schScale);
-    painter->setFont(font);
+        painter->setPen(settings->getColor(mLayer));
+        QFont font = settings->schFont;
+        font.setPixelSize(mSize * settings->textScale * settings->schScale);
+        painter->setFont(font);
 
-    QPointF paintPosition = mPosition * settings->schScale;
-    paintPosition.ry() *= -1;
-    painter->translate(paintPosition);
+        QPointF paintPosition = mPosition * settings->schScale;
+        paintPosition.ry() *= -1;
+        painter->translate(paintPosition);
 
-    auto lines = mText.split("\n");
-    qreal textHeight = painter->fontMetrics().boundingRect('A').height();
+        auto lines = mText.split("\n");
+        qreal textHeight = painter->fontMetrics().boundingRect('A').height();
 
-    int drawAngle = mAngle;
-    EAlign drawAlign = mAlign;
-    if (readable) {
-        if (mAngle > 135 && mAngle <= 315) {
-            drawAngle = (drawAngle + 180) % 360;
-            if (drawAlign == AlignBottomLeft)
-                drawAlign = AlignTopRight;
-            else if (drawAlign == AlignBottomCenter)
-                drawAlign = AlignTopCenter;
-            else if (drawAlign == AlignBottomRight)
-                drawAlign = AlignTopLeft;
-            else if (drawAlign == AlignCenterLeft)
-                drawAlign = AlignCenterRight;
-            else if (drawAlign == AlignCenterRight)
-                drawAlign = AlignCenterLeft;
-            else if (drawAlign == AlignTopLeft)
-                drawAlign = AlignBottomRight;
-            else if (drawAlign == AlignTopCenter)
-                drawAlign = AlignBottomCenter;
-            else if (drawAlign == AlignTopRight)
-                drawAlign = AlignBottomLeft;
+        int drawAngle = mAngle;
+        EAlign drawAlign = mAlign;
+        if (readable) {
+            if (mAngle > 135 && mAngle <= 315) {
+                drawAngle = (drawAngle + 180) % 360;
+                if (drawAlign == AlignBottomLeft)
+                    drawAlign = AlignTopRight;
+                else if (drawAlign == AlignBottomCenter)
+                    drawAlign = AlignTopCenter;
+                else if (drawAlign == AlignBottomRight)
+                    drawAlign = AlignTopLeft;
+                else if (drawAlign == AlignCenterLeft)
+                    drawAlign = AlignCenterRight;
+                else if (drawAlign == AlignCenterRight)
+                    drawAlign = AlignCenterLeft;
+                else if (drawAlign == AlignTopLeft)
+                    drawAlign = AlignBottomRight;
+                else if (drawAlign == AlignTopCenter)
+                    drawAlign = AlignBottomCenter;
+                else if (drawAlign == AlignTopRight)
+                    drawAlign = AlignBottomLeft;
+            }
         }
+        painter->rotate(-drawAngle);
+
+        // point for vertical alight
+        qreal textVOffset = 0;
+        int linesCount = lines.length();
+        if (drawAlign == AlignBottomLeft || drawAlign == AlignBottomCenter
+            || drawAlign == AlignBottomRight)
+            textVOffset = (linesCount - 1) * (1 + 0.01 * mDistance) * textHeight;
+        else if (drawAlign == AlignCenterLeft || drawAlign == AlignCenter
+                 || drawAlign == AlignCenterRight)
+            textVOffset = ((linesCount - 1) * textHeight * (1 + 0.01 * mDistance)) / 2;
+
+        qreal yOffset = 0;
+        foreach (QString line, lines) {
+            qreal lineWidth = painter->fontMetrics().horizontalAdvance(line);
+            QPointF linePos = ECommon::getDrawPosition(textHeight, lineWidth, drawAlign);
+            linePos.ry() += -textVOffset + yOffset;
+            painter->drawText(linePos, line);
+            yOffset += textHeight + textHeight * mDistance / 100;
+        }
+
+        painter->restore();
     }
-    painter->rotate(-drawAngle);
-
-    // point for vertical alight
-    qreal textVOffset = 0;
-    int linesCount = lines.length();
-    if (drawAlign == AlignBottomLeft || drawAlign == AlignBottomCenter
-        || drawAlign == AlignBottomRight)
-        textVOffset = (linesCount - 1) * (1 + 0.01 * mDistance) * textHeight;
-    else if (drawAlign == AlignCenterLeft || drawAlign == AlignCenter
-             || drawAlign == AlignCenterRight)
-        textVOffset = ((linesCount - 1) * textHeight * (1 + 0.01 * mDistance)) / 2;
-
-    qreal yOffset = 0;
-    foreach (QString line, lines) {
-        qreal lineWidth = painter->fontMetrics().horizontalAdvance(line);
-        QPointF linePos = ECommon::getDrawPosition(textHeight, lineWidth, drawAlign);
-        linePos.setY(linePos.y() - textVOffset + yOffset);
-        painter->drawText(linePos, line);
-        yOffset += textHeight + textHeight * mDistance / 100;
-    }
-
-    painter->restore();
 }

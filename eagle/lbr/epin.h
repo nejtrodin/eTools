@@ -2,7 +2,7 @@
 #define EPIN_H
 
 #include "../common/ecommon.h"
-#include "../../settings.h"
+#include "settings.h"
 #include <QPainter>
 
 class EPin : public ECoreElement

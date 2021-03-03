@@ -35,23 +35,25 @@ void ECircle::setDomElement(QDomElement rootElement)
 
 void ECircle::paint(QPainter *painter, Settings *settings)
 {
-    painter->save();
-    if (mValidFlag) {
-        QPen pen = painter->pen();
-        pen.setColor(settings->getColor(mLayer));
-        pen.setWidth(mWidth * settings->schScale);
-        painter->setPen(pen);
+    if (settings->layers.contains(mLayer) && settings->layers[mLayer].visible) {
+        painter->save();
+        if (mValidFlag) {
+            QPen pen = painter->pen();
+            pen.setColor(settings->getColor(mLayer));
+            pen.setWidth(mWidth * settings->schScale);
+            painter->setPen(pen);
 
-        // fill circle if width = 0
-        if (mWidth == 0) {
-            QBrush brush = painter->brush();
-            brush.setColor(settings->getColor(mLayer));
-            brush.setStyle(Qt::SolidPattern);
-            painter->setBrush(brush);
+            // fill circle if width == 0
+            if (mWidth == 0) {
+                QBrush brush = painter->brush();
+                brush.setColor(settings->getColor(mLayer));
+                brush.setStyle(Qt::SolidPattern);
+                painter->setBrush(brush);
+            }
+
+            painter->drawEllipse(QPointF(mX * settings->schScale, -mY * settings->schScale),
+                                 mRadius * settings->schScale, mRadius * settings->schScale);
         }
-
-        painter->drawEllipse(QPointF(mX * settings->schScale, -mY * settings->schScale),
-                             mRadius * settings->schScale, mRadius * settings->schScale);
+        painter->restore();
     }
-    painter->restore();
 }

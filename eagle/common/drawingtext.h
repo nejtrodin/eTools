@@ -8,10 +8,13 @@
 class DrawingText
 {
 public:
-    DrawingText(QString text, QPointF position, qreal size, int angle, EAlign align, int layer,
+    DrawingText(QPointF position, qreal size, int angle, EAlign align, int layer, QString text = "",
                 int distance = 50);
     void setText(QString text) { mText = text; }
     QString text() { return mText; }
+    QPointF pos() { return mPosition; }
+    bool mirrored() { return mMirrorFlag; }
+    int angle() { return mAngle; }
     void move(QPointF position);
     void rotate(int angle);
     void mirror();
@@ -25,6 +28,7 @@ private:
     EAlign mAlign;
     int mLayer;
     int mDistance;
+    bool mMirrorFlag = false;
 };
 
 #endif // DRAWINGTEXT_H

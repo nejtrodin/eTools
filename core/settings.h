@@ -4,6 +4,7 @@
 #include <QtCore>
 #include <QColor>
 #include <QFont>
+#include "layer.h"
 
 /* Настройки цветов
  * В Eagle хранятся значения 64 цветов. Для каждого слоя назначается номер соответствующего ему
@@ -14,7 +15,7 @@ class Settings
 {
 public:
     Settings();
-    QColor getColor(int layer);
+    QColor getColor(int layerNumber);
 
     QFont schFont;
     qreal schScale = 1;
@@ -103,10 +104,10 @@ public:
         QColor::fromRgb(127, 127, 127, 180),
     };
 
-    QMap<int, int> layersColor;
+    QMap<int, Layer> layers;
 
     // коэффициент перевода размера текста в пиксели. FIXME: нужно рассчитывать
-    const qreal textScale = 1.5;
+    const qreal textScale = 1.4;
 
     qreal pinXOffset = 1;  // смещение текста от конца линии пина
     qreal pinTextSize = 2;
@@ -115,6 +116,7 @@ public:
     qreal padTextSize = 2;
     const int pinLayer = 94;
     const int pinTextLayer = 95;
+    qreal labelUpOffset = 1;
 };
 
 #endif // SETTINGS_H

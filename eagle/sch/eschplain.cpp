@@ -37,7 +37,8 @@ void ESchPlain::paint(QPainter *painter, Settings *settings)
 {
     QVector<EText>::iterator iText;
     for (iText = mTexts.begin(); iText != mTexts.end(); ++iText) {
-        iText->paint(painter, settings);
+        auto drawingText = iText->getDrawingText();
+        drawingText.paint(painter, settings);
     }
 
     QVector<EWire>::iterator iWire;

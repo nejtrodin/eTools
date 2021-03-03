@@ -12,6 +12,7 @@
 #include "documenttreemodel.h"
 #include "bomlistmodel.h"
 #include "schviewitem.h"
+#include "layerlistmodel.h"
 
 int main(int argc, char* argv[])
 {
@@ -29,11 +30,12 @@ int main(int argc, char* argv[])
     qmlRegisterType<EFileInfo>          ("ETools", 1, 0, "EFileInfo");
     qmlRegisterType<SchExport>          ("ETools", 1, 0, "SchExport");
     qmlRegisterType<SchViewItem>        ("ETools", 1, 0, "SchViewItem");
-    qmlRegisterType<SheetSettingsModel>("ETools", 1, 0, "SheetSettingsModel");
+    qmlRegisterType<SheetSettingsModel> ("ETools", 1, 0, "SheetSettingsModel");
+    qmlRegisterType<LayerListModel>     ("ETools", 1, 0, "LayerListModel");
 
     QQmlApplicationEngine engine;
     const QUrl url(QStringLiteral("qrc:/ETools.qml"));
-    //    const QUrl url(QStringLiteral("qrc:/EToolsTest.qml"));
+//    const QUrl url(QStringLiteral("qrc:/EToolsTest.qml"));
     QObject::connect(
             &engine, &QQmlApplicationEngine::objectCreated, &app,
             [url](QObject *obj, const QUrl &objUrl) {

@@ -12,6 +12,10 @@ public:
     EWire() { }
     void setDomElement(QDomElement rootElement) override;
     void paint(QPainter *painter, Settings *settings);
+    qreal x1() { return mX1; }
+    qreal y1() { return mY1; }
+    qreal x2() { return mX2; }
+    qreal y2() { return mY2; }
 
 private:
     qreal mX1 = 0;

@@ -12,6 +12,7 @@ ApplicationWindow {
     height: 480
     title: qsTr("eagleTools")
     property string theme: "light"
+    property bool vertical : height > width
 
     Settings {
         category: "MainWindow"

@@ -4,6 +4,8 @@
 #include <QtCore>
 #include <QAbstractTableModel>
 #include "eagle/sch/eschematic.h"
+#include "layerlistmodel.h"
+#include "settings.h"
 
 typedef enum {
     PageSizeA4,
@@ -69,6 +71,7 @@ private:
     QList<SheetSetting> mSheetSettings;
 };
 
+
 class SchExport : public QObject
 {
     Q_OBJECT
@@ -77,12 +80,15 @@ public:
     SchExport(QObject *parent = nullptr);
     Q_INVOKABLE void openFile(QString path);
     Q_INVOKABLE SheetSettingsModel *getSheetSettingsModel() { return mpSheetSettingsModel; }
+    Q_INVOKABLE LayerListModel *getLayerListModel() { return mpLayerListModel; }
     Q_INVOKABLE void exportToPdf(QString filePath, bool colorAsBlack, bool addBorder);
 
 private:
     bool mValid = false;
     SheetSettingsModel *mpSheetSettingsModel;
+    LayerListModel *mpLayerListModel;
     ESchematic mESchematic;
+    Settings mSettings;
 };
 
 #endif // SCHEXPORT_H

@@ -73,93 +73,98 @@ void ESchInstance::paint(QPainter *painter, Settings *settings, ESchCore *schCor
     for (iPin = pins.begin(); iPin != pins.end(); ++iPin) {
         QPointF pinSymStartPoint =
                 QPointF(iPin->x() * settings->schScale, iPin->y() * settings->schScale);
-        QPointF pinSymFinishPoint = pinSymStartPoint
-                + ECommon::rotatePoint(QPointF(iPin->length() * settings->schScale, 0),
-                                       iPin->angle());
-
-        QPointF pinInstStartPoint = ECommon::rotatePoint(pinSymStartPoint, mAngle);
-        QPointF pinInstFinishPoint = ECommon::rotatePoint(pinSymFinishPoint, mAngle);
-        if (mMirrorFlag) {
-            pinInstStartPoint.setX(-pinInstStartPoint.x());
-            pinInstFinishPoint.setX(-pinInstFinishPoint.x());
-        }
-        pinInstStartPoint.setX(pinInstStartPoint.x() + mX * settings->schScale);
-        pinInstStartPoint.setY(-pinInstStartPoint.y() - mY * settings->schScale);
-        pinInstFinishPoint.setX(pinInstFinishPoint.x() + mX * settings->schScale);
-        pinInstFinishPoint.setY(-pinInstFinishPoint.y() - mY * settings->schScale);
-
-        QPen pen = painter->pen();
-        pen.setColor(settings->getColor(settings->pinLayer));
-        pen.setWidth(pinWidth * settings->schScale);
-        painter->setPen(pen);
-        painter->drawLine(pinInstStartPoint, pinInstFinishPoint);
-
-        // draw pin & pad text
-        int pinAngle = iPin->angle() + mAngle;
-        while (pinAngle < 0)
-            pinAngle += 360;
-        if (mMirrorFlag && (mAngle <= 45 || mAngle > 315 || (mAngle > 135 && mAngle <= 225)))
-            pinAngle += 180;
-        pinAngle = pinAngle % 360;
-        qreal textAngle = 0;
-        if ((pinAngle > 45 && pinAngle <= 135) || (pinAngle > 225 && pinAngle <= 315))
-            textAngle = 90;
-
-        // pin Text
-        if (iPin->visible() == EPin::VisiblePin || iPin->visible() == EPin::VisibleBoth) {
-            EAlign pinTextAlign = AlignCenterLeft;
-            if (pinAngle > 135 && pinAngle <= 315)
-                pinTextAlign = AlignCenterRight;
-
-            QPointF pinTextSymPoint = pinSymStartPoint
-                    + ECommon::rotatePoint(QPointF((iPin->length() + settings->pinXOffset)
-                                                           * settings->schScale,
-                                                   0),
+        // draw pin line on Symbols layer - 94
+        if (settings->layers.contains(94) && settings->layers[94].visible) {
+            QPointF pinSymFinishPoint = pinSymStartPoint
+                    + ECommon::rotatePoint(QPointF(iPin->length() * settings->schScale, 0),
                                            iPin->angle());
-            QPointF pinTextInstPoint = ECommon::rotatePoint(pinTextSymPoint, mAngle);
-            if (mMirrorFlag)
-                pinTextInstPoint.setX(-pinTextInstPoint.x());
-            pinTextInstPoint.setX(pinTextInstPoint.x() + mX * settings->schScale);
-            pinTextInstPoint.setY(-pinTextInstPoint.y() - mY * settings->schScale);
-            ELabel::drawText(painter, pinTextInstPoint, iPin->name(), settings->pinTextSize,
-                             textAngle, pinTextAlign, settings->pinTextLayer, settings);
+
+            QPointF pinInstStartPoint = ECommon::rotatePoint(pinSymStartPoint, mAngle);
+            QPointF pinInstFinishPoint = ECommon::rotatePoint(pinSymFinishPoint, mAngle);
+            if (mMirrorFlag) {
+                pinInstStartPoint.setX(-pinInstStartPoint.x());
+                pinInstFinishPoint.setX(-pinInstFinishPoint.x());
+            }
+            pinInstStartPoint.setX(pinInstStartPoint.x() + mX * settings->schScale);
+            pinInstStartPoint.setY(-pinInstStartPoint.y() - mY * settings->schScale);
+            pinInstFinishPoint.setX(pinInstFinishPoint.x() + mX * settings->schScale);
+            pinInstFinishPoint.setY(-pinInstFinishPoint.y() - mY * settings->schScale);
+
+            QPen pen = painter->pen();
+            pen.setColor(settings->getColor(settings->pinLayer));
+            pen.setWidth(pinWidth * settings->schScale);
+            painter->setPen(pen);
+            painter->drawLine(pinInstStartPoint, pinInstFinishPoint);
         }
 
-        // pad Text
-        if (iPin->visible() == EPin::VisiblePad || iPin->visible() == EPin::VisibleBoth) {
-            QString padName;
-            // find pad value
-            QList<EConnect>::Iterator iConnect;
-            for (iConnect = connects.begin(); iConnect != connects.end(); ++iConnect) {
-                if (iConnect->pin == iPin->name()) {
-                    padName = iConnect->pad;
-                    break;
-                }
+        // draw pin & pad text on Names layer - 95
+        if (settings->layers.contains(95) && settings->layers[95].visible) {
+            int pinAngle = iPin->angle() + mAngle;
+            while (pinAngle < 0)
+                pinAngle += 360;
+            if (mMirrorFlag && (mAngle <= 45 || mAngle > 315 || (mAngle > 135 && mAngle <= 225)))
+                pinAngle += 180;
+            pinAngle = pinAngle % 360;
+            qreal textAngle = 0;
+            if ((pinAngle > 45 && pinAngle <= 135) || (pinAngle > 225 && pinAngle <= 315))
+                textAngle = 90;
+
+            // pin Text
+            if (iPin->visible() == EPin::VisiblePin || iPin->visible() == EPin::VisibleBoth) {
+                EAlign pinTextAlign = AlignCenterLeft;
+                if (pinAngle > 135 && pinAngle <= 315)
+                    pinTextAlign = AlignCenterRight;
+
+                QPointF pinTextSymPoint = pinSymStartPoint
+                        + ECommon::rotatePoint(QPointF((iPin->length() + settings->pinXOffset)
+                                                               * settings->schScale,
+                                                       0),
+                                               iPin->angle());
+                QPointF pinTextInstPoint = ECommon::rotatePoint(pinTextSymPoint, mAngle);
+                if (mMirrorFlag)
+                    pinTextInstPoint.setX(-pinTextInstPoint.x());
+                pinTextInstPoint.setX(pinTextInstPoint.x() + mX * settings->schScale);
+                pinTextInstPoint.setY(-pinTextInstPoint.y() - mY * settings->schScale);
+                ELabel::drawText(painter, pinTextInstPoint, iPin->name(), settings->pinTextSize,
+                                 textAngle, pinTextAlign, settings->pinTextLayer, settings);
             }
 
-            EAlign padTextAlign = AlignBottomRight;
-            if (pinAngle > 135 && pinAngle <= 315)
-                padTextAlign = AlignBottomLeft;
+            // pad Text
+            if (iPin->visible() == EPin::VisiblePad || iPin->visible() == EPin::VisibleBoth) {
+                QString padName;
+                // find pad value
+                QList<EConnect>::Iterator iConnect;
+                for (iConnect = connects.begin(); iConnect != connects.end(); ++iConnect) {
+                    if (iConnect->pin == iPin->name()) {
+                        padName = iConnect->pad;
+                        break;
+                    }
+                }
 
-            QPointF padTextSymPoint = pinSymStartPoint
-                    + ECommon::rotatePoint(QPointF((iPin->length() - settings->padXOffset)
-                                                           * settings->schScale,
-                                                   0),
-                                           iPin->angle());
-            QPointF padTextInstPoint = ECommon::rotatePoint(padTextSymPoint, mAngle);
-            if (mMirrorFlag)
-                padTextInstPoint.setX(-padTextInstPoint.x());
-            padTextInstPoint.setX(padTextInstPoint.x() + mX * settings->schScale);
-            padTextInstPoint.setY(-padTextInstPoint.y() - mY * settings->schScale);
+                EAlign padTextAlign = AlignBottomRight;
+                if (pinAngle > 135 && pinAngle <= 315)
+                    padTextAlign = AlignBottomLeft;
 
-            if (textAngle == 0)
-                padTextInstPoint.ry() -= settings->padYOffset * settings->schScale;
-            else
-                padTextInstPoint.rx() -= settings->padYOffset * settings->schScale;
+                QPointF padTextSymPoint = pinSymStartPoint
+                        + ECommon::rotatePoint(QPointF((iPin->length() - settings->padXOffset)
+                                                               * settings->schScale,
+                                                       0),
+                                               iPin->angle());
+                QPointF padTextInstPoint = ECommon::rotatePoint(padTextSymPoint, mAngle);
+                if (mMirrorFlag)
+                    padTextInstPoint.setX(-padTextInstPoint.x());
+                padTextInstPoint.setX(padTextInstPoint.x() + mX * settings->schScale);
+                padTextInstPoint.setY(-padTextInstPoint.y() - mY * settings->schScale);
 
-            ELabel::drawText(painter, padTextInstPoint, padName, settings->padTextSize, textAngle,
-                             padTextAlign, settings->pinTextLayer, settings);
-        }
+                if (textAngle == 0)
+                    padTextInstPoint.ry() -= settings->padYOffset * settings->schScale;
+                else
+                    padTextInstPoint.rx() -= settings->padYOffset * settings->schScale;
+
+                ELabel::drawText(painter, padTextInstPoint, padName, settings->padTextSize, textAngle,
+                                 padTextAlign, settings->pinTextLayer, settings);
+            }
+        }  // end drawing pin & pad text
     }
     painter->restore();
 
@@ -184,8 +189,9 @@ void ESchInstance::paint(QPainter *painter, Settings *settings, ESchCore *schCor
 
     if (mSmashed) {
         foreach (EAttribute attribute, mAttributes) {
-            DrawingText attributeText(attributes[attribute.name()], QPointF(0, 0), attribute.size(),
-                                      attribute.angle(), attribute.align(), attribute.layer());
+            DrawingText attributeText(QPointF(0, 0), attribute.size(), attribute.angle(),
+                                      attribute.align(), attribute.layer(),
+                                      attributes[attribute.name()]);
             if (attribute.mirror())
                 attributeText.mirror();
             attributeText.move(attribute.position());

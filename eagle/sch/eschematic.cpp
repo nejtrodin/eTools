@@ -2,7 +2,7 @@
 #include <QFile>
 #include <QDebug>
 
-bool ESchematic::openFile(QString filePath)
+bool ESchematic::openFile(QString filePath, Settings *settings)
 {
     // clear all
     mSheets.clear();
@@ -44,6 +44,27 @@ bool ESchematic::openFile(QString filePath)
         } else {
             QDomElement drawingElement = rootElement.firstChildElement("drawing");
             if (!drawingElement.isNull()) {
+                // layers
+                QDomElement layersElement = drawingElement.firstChildElement("layers");
+                if (!layersElement.isNull()) {
+                    if (settings != nullptr)
+                        settings->layers.clear();
+
+                    QDomElement layerElement = layersElement.firstChildElement("layer");
+                    while (!layerElement.isNull()) {
+                        ELayer eLayer;
+                        eLayer.setDomElement(layerElement);
+                        mLayers.append(eLayer);
+                        if (settings != nullptr) {
+                            Layer layer = eLayer.getLayer();
+                            if (layer.active)
+                                settings->layers.insert(layer.number, layer);
+                        }
+
+                        layerElement = layerElement.nextSiblingElement("layer");
+                    }
+                }
+
                 QDomElement schematicElement = drawingElement.firstChildElement("schematic");
                 if (!schematicElement.isNull()) {
                     // libraries

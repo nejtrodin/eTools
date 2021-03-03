@@ -13,7 +13,7 @@ public:
     void setDomElement(QDomElement rootElement) override;
     static void drawText(QPainter *painter, QPointF position, QString text, qreal size, int angle,
                          EAlign align, int layer, Settings *settings);
-    void paint(QPainter *painter, Settings *settings, QString text);
+    DrawingText getDrawingText();
 
 protected:
     qreal mX = 0;
@@ -31,15 +31,12 @@ class EText : public ELabel
 public:
     EText() { }
     void setDomElement(QDomElement rootElement) override;
-    void paint(QString text, QPainter *painter, Settings *settings);
-    void paint(QPainter *painter, Settings *settings);
-
     DrawingText getDrawingText();
     QString text() { return mText; }
 
 private:
     QString mText;
-    int distance = 50;
+    int mDistance = 50;
 };
 
 #endif // ETEXT_H

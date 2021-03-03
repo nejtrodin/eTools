@@ -24,12 +24,15 @@ QMAKE_TARGET_DESCRIPTION = eTools
 QMAKE_TARGET_COPYRIGHT = (c) Vyasheslav Sinishenko
 RC_ICONS = images/eTools.ico
 
-INCLUDEPATH += common
-INCLUDEPATH += sch
-INCLUDEPATH += brd
+INCLUDEPATH += core
+INCLUDEPATH += eagle/common
+INCLUDEPATH += eagle/sch
+INCLUDEPATH += eagle/brd
 
 SOURCES += \
     bomlistmodel.cpp \
+    core/settings.cpp \
+    core/layer.cpp \
     documenttreemodel.cpp \
     eagle/brd/ebrdpad.cpp \
     eagle/brd/ebrdvia.cpp \
@@ -39,6 +42,7 @@ SOURCES += \
     eagle/common/eattribute.cpp \
     eagle/common/ecircle.cpp \
     eagle/common/ecommon.cpp \
+    eagle/common/elayer.cpp \
     eagle/common/erectangle.cpp \
     eagle/common/etext.cpp \
     eagle/common/evalueattribute.cpp \
@@ -64,8 +68,8 @@ SOURCES += \
     eagle/sch/eschplain.cpp \
     eagle/sch/eschsheet.cpp \
     eagle/sch/esegment.cpp \
+    layerlistmodel.cpp \
     schviewitem.cpp \
-    settings.cpp \
     tools/bommanager.cpp \
     tools/drillreporter.cpp \
     tools/efileinfo.cpp \
@@ -74,6 +78,8 @@ SOURCES += \
 
 HEADERS += \
     bomlistmodel.h \
+    core/settings.h \
+    core/layer.h \
     documenttreemodel.h \
     eagle/brd/ebrdpad.h \
     eagle/brd/ebrdvia.h \
@@ -83,6 +89,7 @@ HEADERS += \
     eagle/common/eattribute.h \
     eagle/common/ecircle.h \
     eagle/common/ecommon.h \
+    eagle/common/elayer.h \
     eagle/common/erectangle.h \
     eagle/common/etext.h \
     eagle/common/evalueattribute.h \
@@ -108,8 +115,8 @@ HEADERS += \
     eagle/sch/eschplain.h \
     eagle/sch/eschsheet.h \
     eagle/sch/esegment.h \
+    layerlistmodel.h \
     schviewitem.h \
-    settings.h \
     tools/bommanager.h \
     tools/drillreporter.h \
     tools/efileinfo.h \

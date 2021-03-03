@@ -71,11 +71,12 @@ void SheetSettingsModel::setSettings(QList<SheetSetting> settings)
 SchExport::SchExport(QObject *parent) : QObject(parent)
 {
     mpSheetSettingsModel = new SheetSettingsModel(this);
+    mpLayerListModel = new LayerListModel(this);
 }
 
 void SchExport::openFile(QString path)
 {
-    mValid = mESchematic.openFile(path);
+    mValid = mESchematic.openFile(path, &mSettings);
 
     QList<SheetSetting> sheetSettings;
     if (mValid) {
@@ -91,7 +92,10 @@ void SchExport::openFile(QString path)
         }
     }
     mpSheetSettingsModel->setSettings(sheetSettings);
+    mpLayerListModel->setSettings(&mSettings);
 }
+
+#include <QDesktopServices>
 
 void SchExport::exportToPdf(QString filePath, bool colorAsBlack, bool addBorder)
 {
@@ -99,16 +103,17 @@ void SchExport::exportToPdf(QString filePath, bool colorAsBlack, bool addBorder)
     QPainter painter;
 
     qreal scale = printer.resolution() / 25.4;
-    Settings printSettings;
-    printSettings.schScale = scale;
+    mSettings.schScale = scale;
 
     if (colorAsBlack)
         for (int i = 0; i < 64; i++)
-            printSettings.themeColors[i] = Qt::black;
+            mSettings.themeColors[i] = Qt::black;
 
     int id = QFontDatabase::addApplicationFont(":/fonts/gost_b.ttf");
     QString gost_b = QFontDatabase::applicationFontFamilies(id).at(0);
-    printSettings.schFont = QFont(gost_b);
+    mSettings.schFont = QFont(gost_b);
+
+    mpLayerListModel->updateSettings(&mSettings);
 
     QList<SheetSetting> sheetSettings = mpSheetSettingsModel->getSettings();
     QList<SheetSetting>::iterator iSettings;
@@ -154,7 +159,7 @@ void SchExport::exportToPdf(QString filePath, bool colorAsBlack, bool addBorder)
             // draw sheet
             painter.save();
             painter.translate(0, pageRect.height());
-            mESchematic.paint(&painter, &printSettings, sheetPage);
+            mESchematic.paint(&painter, &mSettings, sheetPage);
             painter.restore();
 
             if (addBorder) {
@@ -176,4 +181,6 @@ void SchExport::exportToPdf(QString filePath, bool colorAsBlack, bool addBorder)
     }
 
     painter.end();
+
+    QDesktopServices::openUrl(QUrl(filePath));
 }
