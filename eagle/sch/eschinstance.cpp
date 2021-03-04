@@ -181,7 +181,12 @@ void ESchInstance::paint(QPainter *painter, Settings *settings, ESchCore *schCor
     QString gateName = gate.name();
     if (gateName.startsWith("G$"))
         gateName = "";
-    attributes["NAME"] = part.name() + gateName;
+    QString name = part.name() + gateName;
+    name = name.split("@").first();
+    name = name.split("#").first();
+    name = name.split("'").first();
+    name = name.split("|").first();
+    attributes["NAME"] = name;
     if (part.value().isEmpty())
         attributes["VALUE"] = device.name() + deviceset.name();
     else
