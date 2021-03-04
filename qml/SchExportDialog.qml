@@ -32,10 +32,6 @@ Item {
                     selectByMouse: true
                 }
                 Button {
-                    text: qsTr("Select file")
-                    font.capitalization: Font.MixedCase
-                }
-                Button {
                     text: qsTr("Export")
                     font.capitalization: Font.MixedCase
                     onClicked: schExport.exportToPdf(outFilePath.text, colorAsBlackSwitch.checked,
