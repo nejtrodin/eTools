@@ -3,7 +3,7 @@
 
 #include "ecommon.h"
 #include "drawingtext.h"
-#include "settings.h"
+#include "schSettings.h"
 #include <QPainter>
 
 class ELabel : public ECoreElement
@@ -12,7 +12,7 @@ public:
     ELabel() { }
     void setDomElement(QDomElement rootElement) override;
     static void drawText(QPainter *painter, QPointF position, QString text, qreal size, int angle,
-                         EAlign align, int layer, Settings *settings);
+                         EAlign align, int layer, SchSettings *settings);
     DrawingText getDrawingText();
 
 protected:

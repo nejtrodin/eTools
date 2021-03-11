@@ -3,7 +3,7 @@
 
 #include <QtCore>
 #include "ecommon.h"
-#include "settings.h"
+#include "schSettings.h"
 #include <QPainter>
 
 class EWire : public ECoreElement
@@ -11,7 +11,7 @@ class EWire : public ECoreElement
 public:
     EWire() { }
     void setDomElement(QDomElement rootElement) override;
-    void paint(QPainter *painter, Settings *settings);
+    void paint(QPainter *painter, SchSettings *settings);
     qreal x1() { return mX1; }
     qreal y1() { return mY1; }
     qreal x2() { return mX2; }

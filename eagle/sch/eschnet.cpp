@@ -27,7 +27,7 @@ void ESchNet::setDomElement(QDomElement rootElement)
         qDebug() << "Parse error. Line:" << mElement.lineNumber();
 }
 
-void ESchNet::paint(QPainter *painter, Settings *settings)
+void ESchNet::paint(QPainter *painter, SchSettings *settings)
 {
     QVector<ESegment>::iterator iSegment;
     for (iSegment = mSegments.begin(); iSegment != mSegments.end(); ++iSegment) {

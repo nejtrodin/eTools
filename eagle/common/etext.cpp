@@ -33,13 +33,13 @@ void ELabel::setDomElement(QDomElement rootElement)
 }
 
 void ELabel::drawText(QPainter *painter, QPointF position, QString text, qreal size, int angle,
-                      EAlign align, int layer, Settings *settings)
+                      EAlign align, int layer, SchSettings *settings)
 {
     painter->save();
 
-    painter->setPen(settings->getColor(layer));
-    QFont font = settings->schFont;
-    font.setPixelSize(size * settings->textScale * settings->schScale);
+    painter->setPen(settings->getLayerColor(layer));
+    QFont font = settings->font();
+    font.setPixelSize(settings->sizeToPx(size) * settings->scale());
     painter->setFont(font);
 
     painter->translate(position);

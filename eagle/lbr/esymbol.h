@@ -6,7 +6,7 @@
 #include "../common/erectangle.h"
 #include "../common/etext.h"
 #include "../common/ewire.h"
-#include "settings.h"
+#include "schSettings.h"
 #include <QPainter>
 
 class ESymbol : public ECoreElement
@@ -14,7 +14,7 @@ class ESymbol : public ECoreElement
 public:
     ESymbol() { }
     void setDomElement(QDomElement rootElement) override;
-    void paint(QPainter *painter, Settings *settings);
+    void paint(QPainter *painter, SchSettings *settings);
     QString name() { return mName; }
     QVector<EPin> getPins() { return mPins; }
     QVector<EText> getTexts() { return mTexts; }

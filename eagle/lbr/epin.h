@@ -2,7 +2,7 @@
 #define EPIN_H
 
 #include "../common/ecommon.h"
-#include "settings.h"
+#include "schSettings.h"
 #include <QPainter>
 
 class EPin : public ECoreElement
@@ -16,7 +16,6 @@ public:
     };
 
     void setDomElement(QDomElement rootElement) override;
-    void paint(QPainter *painter, QString padName, Settings *settings);
     QString name() { return mName; }
     qreal x() { return mX; }
     qreal y() { return mY; }

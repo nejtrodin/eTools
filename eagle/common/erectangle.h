@@ -3,14 +3,14 @@
 
 #include <QPainter>
 #include "ecommon.h"
-#include "settings.h"
+#include "schSettings.h"
 
 class ERectangle : public ECoreElement
 {
 public:
     ERectangle() { }
     void setDomElement(QDomElement rootElement) override;
-    void paint(QPainter *painter, Settings *settings);
+    void paint(QPainter *painter, SchSettings *settings);
 
 private:
     qreal mX1 = 0;

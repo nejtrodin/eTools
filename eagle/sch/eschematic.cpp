@@ -2,7 +2,7 @@
 #include <QFile>
 #include <QDebug>
 
-bool ESchematic::openFile(QString filePath, Settings *settings)
+bool ESchematic::openFile(QString filePath, SchSettings *settings)
 {
     // clear all
     mSheets.clear();
@@ -46,23 +46,21 @@ bool ESchematic::openFile(QString filePath, Settings *settings)
             if (!drawingElement.isNull()) {
                 // layers
                 QDomElement layersElement = drawingElement.firstChildElement("layers");
+                QList<Layer> layers;
                 if (!layersElement.isNull()) {
-                    if (settings != nullptr)
-                        settings->layers.clear();
-
                     QDomElement layerElement = layersElement.firstChildElement("layer");
                     while (!layerElement.isNull()) {
                         ELayer eLayer;
                         eLayer.setDomElement(layerElement);
                         mLayers.append(eLayer);
-                        if (settings != nullptr) {
-                            Layer layer = eLayer.getLayer();
-                            if (layer.active)
-                                settings->layers.insert(layer.number, layer);
-                        }
-
+                        Layer layer = eLayer.getLayer();
+                        if (layer.active)
+                            layers.append(layer);
                         layerElement = layerElement.nextSiblingElement("layer");
                     }
+
+                    if (settings != nullptr)
+                        settings->setLayers(layers);
                 }
 
                 QDomElement schematicElement = drawingElement.firstChildElement("schematic");
@@ -113,7 +111,7 @@ bool ESchematic::openFile(QString filePath, Settings *settings)
     return parseResult;
 }
 
-void ESchematic::paint(QPainter *painter, Settings *settings, int sheetNumber)
+void ESchematic::paint(QPainter *painter, SchSettings *settings, int sheetNumber)
 {
     if (mSheets.size() >= sheetNumber) {
         mSheets[sheetNumber].paint(painter, settings, &mSchCore);

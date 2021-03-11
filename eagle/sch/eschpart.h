@@ -3,7 +3,7 @@
 
 #include "../common/ecommon.h"
 #include "../common/evalueattribute.h"
-#include "settings.h"
+#include "schSettings.h"
 
 class ESchPart : public ECoreElement
 {

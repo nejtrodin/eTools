@@ -2,7 +2,7 @@
 #define DRAWINGTEXT_H
 
 #include "ecommon.h"
-#include "settings.h"
+#include "schSettings.h"
 #include <QPainter>
 
 class DrawingText
@@ -18,7 +18,7 @@ public:
     void move(QPointF position);
     void rotate(int angle);
     void mirror();
-    void paint(QPainter *painter, Settings *settings, bool readable = true);
+    void paint(QPainter *painter, SchSettings *settings, bool readable = true);
 
 private:
     QString mText;

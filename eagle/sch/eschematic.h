@@ -7,15 +7,15 @@
 #include "eschcore.h"
 #include "eschpart.h"
 #include "eschsheet.h"
-#include "settings.h"
+#include "schSettings.h"
 #include <QDomDocument>
 
 class ESchematic
 {
 public:
     ESchematic() { }
-    bool openFile(QString filePath, Settings *settings = nullptr);
-    void paint(QPainter *painter, Settings *settings, int sheetNumber = 0);
+    bool openFile(QString filePath, SchSettings *settings = nullptr);
+    void paint(QPainter *painter, SchSettings *settings, int sheetNumber = 0);
     ESchCore getSchCore() { return mSchCore; }
     QStringList sheetList();
 

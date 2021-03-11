@@ -21,24 +21,6 @@ void EPin::setDomElement(QDomElement rootElement)
         qDebug() << "Parse error. Line:" << mElement.lineNumber();
 }
 
-void EPin::paint(QPainter *painter, QString padName, Settings *settings)
-{
-    painter->save();
-    painter->translate(QPointF(mX * settings->schScale, -mY * settings->schScale));
-    painter->rotate(-mAngle);
-
-    QPen pen = painter->pen();
-    pen.setColor(settings->getColor(94));
-    // TODO: add default pin width in settings
-    //    pen.setWidth(iWire->width*settings->schScale);
-    painter->setPen(pen);
-    painter->drawLine(QPointF(0, 0), QPointF(mLength * settings->schScale, 0));
-
-    painter->drawText(0, 0, padName);
-
-    painter->restore();
-}
-
 qreal EPin::parseLengthAttribute(QString lengthValue)
 {
     if (lengthValue == "long")

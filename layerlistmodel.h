@@ -3,7 +3,7 @@
 
 #include <QtCore>
 #include <QAbstractTableModel>
-#include "settings.h"
+#include "schSettings.h"
 #include "layer.h"
 
 class LayerListModel : public QAbstractTableModel
@@ -34,12 +34,12 @@ public:
     int rowCount(const QModelIndex &parent = QModelIndex()) const override;
     int columnCount(const QModelIndex & = QModelIndex()) const override { return 4; }
 
-    void setSettings(Settings *settings);
-    void updateSettings(Settings *settings);
+    void setSettings(const SchSettings &settings);
+    void updateSettings(SchSettings *settings);
 
 private:
     QList<Layer> mLayers;
-    Settings *mpSettings;
+    SchSettings mSettings;
 };
 
 #endif // LAYERLISTMODEL_H

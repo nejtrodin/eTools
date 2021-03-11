@@ -1,5 +1,5 @@
-#ifndef SETTINGS_H
-#define SETTINGS_H
+#ifndef SCHSETTINGS_H
+#define SCHSETTINGS_H
 
 #include <QtCore>
 #include <QColor>
@@ -11,17 +11,39 @@
  * цвета: от 0 до 63.
  */
 
-class Settings
+class SchSettings
 {
 public:
-    Settings();
-    QColor getColor(int layerNumber);
+    SchSettings();
 
-    QFont schFont;
-    qreal schScale = 1;
-    QColor defaultColor = QColor::fromRgb(127, 127, 127, 180);
+    QFont font();
+    qreal sizeToPx(qreal size);
+    qreal scale();
+    void setScale(qreal scale);
+
+    QColor getLayerColor(int layerNumber) const;
+    bool layerIsVisible(int layerNumber);
+    QList<Layer> layers();
+    void setLayers(QList<Layer> layers);
+    void setColorsAsBlack(bool colorsAsBlack);
+
+    qreal pinXOffset() const;
+    qreal pinTextSize() const;
+    qreal padXOffset() const;
+    qreal padYOffset() const;
+    qreal padTextSize() const;
+    qreal labelUpOffset() const;
+
+    static const int netsLayer = 91;
+    static const int pinLayer = 94;
+    static const int pinTextLayer = 95;
+
+private:
+    QFont mFont;
+    qreal mScale = 1;
+    QColor mErrorColor = QColor::fromRgb(255, 255, 0);
     // dark theme from eagle 9
-    QColor themeColors[64] = {
+    QColor mThemeColors[64] = {
         // 0..7
         QColor::fromRgb(0, 0, 0),
         QColor::fromRgb(50, 50, 200),
@@ -31,14 +53,6 @@ public:
         QColor::fromRgb(200, 50, 200),
         QColor::fromRgb(200, 200, 50),
         QColor::fromRgb(200, 200, 200),
-        // with alpha channel
-//        QColor::fromRgb(50, 50, 200, 180),
-//        QColor::fromRgb(50, 200, 50, 180),
-//        QColor::fromRgb(50, 200, 200, 180),
-//        QColor::fromRgb(200, 50, 50, 180),
-//        QColor::fromRgb(200, 50, 200, 180),
-//        QColor::fromRgb(200, 200, 50, 180),
-//        QColor::fromRgb(200, 200, 200, 180),
         // 8..15
         QColor::fromRgb(100, 100, 100, 100),
         QColor::fromRgb(0, 0, 255, 180),
@@ -103,20 +117,15 @@ public:
         QColor::fromRgb(127, 127, 127, 180),
         QColor::fromRgb(127, 127, 127, 180),
     };
+    QMap<int, Layer> mLayers;
+    qreal mPinXOffset = 1;
+    qreal mPinTextSize = 2;
+    qreal mPadXOffset = 1;
+    qreal mPadYOffset = 1;
+    qreal mPadTextSize = 2;
+    qreal mLabelUpOffset = 1;
 
-    QMap<int, Layer> layers;
-
-    // коэффициент перевода размера текста в пиксели. FIXME: нужно рассчитывать
-    const qreal textScale = 1.4;
-
-    qreal pinXOffset = 1;  // смещение текста от конца линии пина
-    qreal pinTextSize = 2;
-    qreal padXOffset = 1;  // смещение текста от конца линии пина
-    qreal padYOffset = 1;
-    qreal padTextSize = 2;
-    const int pinLayer = 94;
-    const int pinTextLayer = 95;
-    qreal labelUpOffset = 1;
+    bool mColorAsBlack = false;
 };
 
-#endif // SETTINGS_H
+#endif // SCHSETTINGS_H

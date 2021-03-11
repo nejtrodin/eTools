@@ -59,17 +59,17 @@ void DrawingText::mirror()
     mMirrorFlag = !mMirrorFlag;
 }
 
-void DrawingText::paint(QPainter *painter, Settings *settings, bool readable)
+void DrawingText::paint(QPainter *painter, SchSettings *settings, bool readable)
 {
-    if (settings->layers.contains(mLayer) && settings->layers[mLayer].visible) {
+    if (settings->layerIsVisible(mLayer)) {
         painter->save();
 
-        painter->setPen(settings->getColor(mLayer));
-        QFont font = settings->schFont;
-        font.setPixelSize(mSize * settings->textScale * settings->schScale);
+        painter->setPen(settings->getLayerColor(mLayer));
+        QFont font = settings->font();
+        font.setPixelSize(settings->sizeToPx(mSize) * settings->scale());
         painter->setFont(font);
 
-        QPointF paintPosition = mPosition * settings->schScale;
+        QPointF paintPosition = mPosition * settings->scale();
         paintPosition.ry() *= -1;
         painter->translate(paintPosition);
 

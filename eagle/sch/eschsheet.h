@@ -6,7 +6,7 @@
 #include "eschplain.h"
 #include "eschinstance.h"
 #include "eschcore.h"
-#include "settings.h"
+#include "schSettings.h"
 #include <QPainter>
 
 class ESchSheet : public ECoreElement
@@ -14,7 +14,7 @@ class ESchSheet : public ECoreElement
 public:
     ESchSheet() { }
     void setDomElement(QDomElement rootElement) override;
-    void paint(QPainter *painter, Settings *settings, ESchCore *schCore);
+    void paint(QPainter *painter, SchSettings *settings, ESchCore *schCore);
     QString description() { return mDescription; }
 
 private:

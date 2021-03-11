@@ -3,7 +3,7 @@
 
 #include <QtCore>
 #include "ecommon.h"
-#include "settings.h"
+#include "schSettings.h"
 #include <QPainter>
 
 class ECircle : public ECoreElement
@@ -11,7 +11,7 @@ class ECircle : public ECoreElement
 public:
     ECircle() { }
     void setDomElement(QDomElement rootElement) override;
-    void paint(QPainter *painter, Settings *settings);
+    void paint(QPainter *painter, SchSettings *settings);
 
 private:
     qreal mX = 0;

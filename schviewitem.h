@@ -6,7 +6,7 @@
 #include <QTouchEvent>
 
 #include "eagle/sch/eschematic.h"
-#include "settings.h"
+#include "schSettings.h"
 
 class SchViewItem : public QQuickPaintedItem
 {
@@ -32,7 +32,7 @@ protected:
 private:
     bool mEmptyFlag;
     ESchematic *mpESchematic;
-    Settings mSettings;
+    SchSettings mSettings;
 
     QPoint mPrevMousePoint; // for moveEvent
     QPoint mPaintOffset;

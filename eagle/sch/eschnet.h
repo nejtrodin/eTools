@@ -2,7 +2,7 @@
 #define ENET_H
 
 #include "esegment.h"
-#include "settings.h"
+#include "schSettings.h"
 #include <QPainter>
 
 class ESchNet : public ECoreElement
@@ -10,7 +10,7 @@ class ESchNet : public ECoreElement
 public:
     ESchNet() { }
     void setDomElement(QDomElement rootElement) override;
-    void paint(QPainter *painter, Settings *settings);
+    void paint(QPainter *painter, SchSettings *settings);
 
 private:
     QString mName;

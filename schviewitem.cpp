@@ -2,7 +2,7 @@
 
 #include <QPainter>
 #include <QFontDatabase>
-#include "settings.h"
+#include "schSettings.h"
 
 SchViewItem::SchViewItem(QQuickItem *parent) : QQuickPaintedItem(parent)
 {
@@ -10,11 +10,7 @@ SchViewItem::SchViewItem(QQuickItem *parent) : QQuickPaintedItem(parent)
     mEmptyFlag = true;
     mPaintOffset = QPoint(0, 0);
 
-    int id = QFontDatabase::addApplicationFont(":/fonts/gost_b.ttf");
-    QString gost_b = QFontDatabase::applicationFontFamilies(id).at(0);
-    mSettings.schFont = QFont(gost_b);
-
-    mSettings.schScale = 2;
+    mSettings.setScale(2);
 
     setFillColor(Qt::black);
     setAcceptedMouseButtons(Qt::LeftButton);
@@ -79,21 +75,23 @@ void SchViewItem::wheelEvent(QWheelEvent *event)
 {
     auto y = event->angleDelta().y();
     QPointF eventPosition = event->position();
-    auto oldScale = mSettings.schScale;
+    auto oldScale = mSettings.scale();
+    auto scale = oldScale;
 
     if (y > 0) {
-        mSettings.schScale *= 1.2;
-    } else if (y < 0 && mSettings.schScale > 1) {
-        mSettings.schScale /= 1.2;
+        scale *= 1.2;
+    } else if (y < 0 && scale > 1) {
+        scale /= 1.2;
     }
 
     qreal offsetX = eventPosition.x()
-            - (-mPaintOffset.x() + eventPosition.x()) * mSettings.schScale / oldScale;
+            - (-mPaintOffset.x() + eventPosition.x()) * scale / oldScale;
     mPaintOffset.rx() = static_cast<int>(offsetX);
     qreal offsetY = eventPosition.y() - height()
-            - (eventPosition.y() - mPaintOffset.y() - height()) * mSettings.schScale / oldScale;
+            - (eventPosition.y() - mPaintOffset.y() - height()) * scale / oldScale;
     mPaintOffset.ry() = static_cast<int>(offsetY);
 
+    mSettings.setScale(scale);
     update();
 }
 

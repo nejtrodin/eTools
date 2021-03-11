@@ -1,6 +1,5 @@
 #include "schexport.h"
 #include <QtPrintSupport/QPrinter>
-#include <QFontDatabase>
 
 const qreal borderWidth = 0.25;
 
@@ -92,7 +91,7 @@ void SchExport::openFile(QString path)
         }
     }
     mpSheetSettingsModel->setSettings(sheetSettings);
-    mpLayerListModel->setSettings(&mSettings);
+    mpLayerListModel->setSettings(mSettings);
 }
 
 #include <QDesktopServices>
@@ -102,18 +101,10 @@ void SchExport::exportToPdf(QString filePath, bool colorAsBlack, bool addBorder)
     QPrinter printer(QPrinter::HighResolution);
     QPainter painter;
 
-    qreal scale = printer.resolution() / 25.4;
-    mSettings.schScale = scale;
-
-    if (colorAsBlack)
-        for (int i = 0; i < 64; i++)
-            mSettings.themeColors[i] = Qt::black;
-
-    int id = QFontDatabase::addApplicationFont(":/fonts/gost_b.ttf");
-    QString gost_b = QFontDatabase::applicationFontFamilies(id).at(0);
-    mSettings.schFont = QFont(gost_b);
-
+    const qreal scale = 1200 / 25.4;
+    mSettings.setScale(scale);
     mpLayerListModel->updateSettings(&mSettings);
+    mSettings.setColorsAsBlack(colorAsBlack);
 
     QList<SheetSetting> sheetSettings = mpSheetSettingsModel->getSettings();
     QList<SheetSetting>::iterator iSettings;
@@ -182,5 +173,5 @@ void SchExport::exportToPdf(QString filePath, bool colorAsBlack, bool addBorder)
 
     painter.end();
 
-    QDesktopServices::openUrl(QUrl(filePath));
+    QDesktopServices::openUrl(QUrl("file:///" + filePath));
 }

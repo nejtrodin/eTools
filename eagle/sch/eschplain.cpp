@@ -33,7 +33,7 @@ void ESchPlain::setDomElement(QDomElement rootElement)
     }
 }
 
-void ESchPlain::paint(QPainter *painter, Settings *settings)
+void ESchPlain::paint(QPainter *painter, SchSettings *settings)
 {
     QVector<EText>::iterator iText;
     for (iText = mTexts.begin(); iText != mTexts.end(); ++iText) {

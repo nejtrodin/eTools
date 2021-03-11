@@ -20,23 +20,23 @@ void ERectangle::setDomElement(QDomElement rootElement)
         qDebug() << "Parse error. Line:" << mElement.lineNumber();
 }
 
-void ERectangle::paint(QPainter *painter, Settings *settings)
+void ERectangle::paint(QPainter *painter, SchSettings *settings)
 {
-    if (settings->layers.contains(mLayer) && settings->layers[mLayer].visible) {
+    if (isValid() && settings->layerIsVisible(mLayer)) {
         painter->save();
 
         QPen pen = painter->pen();
-        pen.setColor(settings->getColor(mLayer));
+        pen.setColor(settings->getLayerColor(mLayer));
         painter->setPen(pen);
         QBrush brush = painter->brush();
         brush.setStyle(Qt::SolidPattern);
-        brush.setColor(settings->getColor(mLayer));
+        brush.setColor(settings->getLayerColor(mLayer));
         painter->setBrush(brush);
 
-        QPointF center = QPointF((mX1 + mX2) / 2 * settings->schScale,
-                                 -(mY1 + mY2) / 2 * settings->schScale);
-        QPointF p1 = QPointF(mX1, -mY1) * settings->schScale - center;
-        QPointF p2 = QPointF(mX2, -mY2) * settings->schScale - center;
+        qreal scale = settings->scale();
+        QPointF center = QPointF((mX1 + mX2) / 2 * scale, -(mY1 + mY2) / 2 * scale);
+        QPointF p1 = QPointF(mX1, -mY1) * scale - center;
+        QPointF p2 = QPointF(mX2, -mY2) * scale - center;
 
         painter->translate(center);
         painter->rotate(-mAngle);

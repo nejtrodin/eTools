@@ -3,7 +3,7 @@
 
 #include "../common/eattribute.h"
 #include "eschcore.h"
-#include "settings.h"
+#include "schSettings.h"
 #include <QPicture>
 
 class ESchInstance : public ECoreElement
@@ -11,7 +11,7 @@ class ESchInstance : public ECoreElement
 public:
     ESchInstance() { }
     void setDomElement(QDomElement rootElement) override;
-    void paint(QPainter *painter, Settings *settings, ESchCore *schCore);
+    void paint(QPainter *painter, SchSettings *settings, ESchCore *schCore);
 
 private:
     QString mPartName;

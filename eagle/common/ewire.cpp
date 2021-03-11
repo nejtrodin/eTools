@@ -41,19 +41,20 @@ void EWire::setDomElement(QDomElement rootElement)
 
 const qreal pi = 3.141592653589793;
 
-void EWire::paint(QPainter *painter, Settings *settings)
+void EWire::paint(QPainter *painter, SchSettings *settings)
 {
-    if (settings->layers.contains(mLayer) && settings->layers[mLayer].visible) {
+    if (settings->layerIsVisible(mLayer)) {
         painter->save();
         if (mValidFlag) {
             QPen pen = painter->pen();
-            pen.setColor(settings->getColor(mLayer));
-            pen.setWidth(mWidth * settings->schScale);
+            qreal scale = settings->scale();
+            pen.setColor(settings->getLayerColor(mLayer));
+            pen.setWidth(mWidth * scale);
             painter->setPen(pen);
 
             if (mCurve == 0) {
-                painter->drawLine(QPointF(mX1 * settings->schScale, -mY1 * settings->schScale),
-                                  QPointF(mX2 * settings->schScale, -mY2 * settings->schScale));
+                painter->drawLine(QPointF(mX1 * scale, -mY1 * scale),
+                                  QPointF(mX2 * scale, -mY2 * scale));
             } else {
                 // arc
                 qreal length = sqrt(pow((mX2 - mX1), 2) + pow((mY2 - mY1), 2));
@@ -72,8 +73,8 @@ void EWire::paint(QPainter *painter, Settings *settings)
                 qreal cX = (mX1 + mX2) / 2 + dist * (mY2 - mY1) / length;
                 qreal cY = (mY1 + mY2) / 2 + dist * (mX2 - mX1) / length;
 
-                QRectF arcRect = QRectF((cX - r) * settings->schScale, (-cY + r) * settings->schScale,
-                                        2 * r * settings->schScale, -2 * r * settings->schScale);
+                QRectF arcRect =
+                        QRectF((cX - r) * scale, (-cY + r) * scale, 2 * r * scale, -2 * r * scale);
                 painter->drawArc(arcRect, a1 * 16, -mCurve * 16);
             }
         }

@@ -68,7 +68,7 @@ void ESchSheet::setDomElement(QDomElement rootElement)
         qDebug() << "Parse error. Line:" << mElement.lineNumber();
 }
 
-void ESchSheet::paint(QPainter *painter, Settings *settings, ESchCore *schCore)
+void ESchSheet::paint(QPainter *painter, SchSettings *settings, ESchCore *schCore)
 {
     mPlain.paint(painter, settings);
 

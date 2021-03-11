@@ -3,7 +3,6 @@
 
 LayerListModel::LayerListModel(QObject *parent) : QAbstractTableModel(parent)
 {
-    mpSettings = nullptr;
 }
 
 QVariant LayerListModel::data(const QModelIndex &index, int role) const
@@ -12,12 +11,13 @@ QVariant LayerListModel::data(const QModelIndex &index, int role) const
         return QVariant();
 
     Layer layer = mLayers.at(index.row());
+
     switch (role) {
     case Qt::DisplayRole:
     case NumberRole:
         return layer.number;
     case ColorRole:
-        return mpSettings->themeColors[layer.colorNumber];
+        return mSettings.getLayerColor(layer.number);
     case NameRole:
         return layer.name;
     case VisibleRole:
@@ -51,17 +51,15 @@ int LayerListModel::rowCount(const QModelIndex &parent) const
     return mLayers.size();
 }
 
-void LayerListModel::setSettings(Settings *settings)
+void LayerListModel::setSettings(const SchSettings &settings)
 {
     beginResetModel();
-    mpSettings = settings;
-    mLayers = mpSettings->layers.values();
+    mSettings = settings;
+    mLayers = mSettings.layers();
     endResetModel();
 }
 
-void LayerListModel::updateSettings(Settings *settings)
+void LayerListModel::updateSettings(SchSettings *settings)
 {
-    settings->layers.clear();
-    foreach(Layer layer, mLayers)
-        settings->layers.insert(layer.number, layer);
+    settings->setLayers(mLayers);
 }

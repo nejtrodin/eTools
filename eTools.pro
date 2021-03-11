@@ -31,8 +31,8 @@ INCLUDEPATH += eagle/brd
 
 SOURCES += \
     bomlistmodel.cpp \
-    core/settings.cpp \
     core/layer.cpp \
+    core/schSettings.cpp \
     documenttreemodel.cpp \
     eagle/brd/ebrdpad.cpp \
     eagle/brd/ebrdvia.cpp \
@@ -78,8 +78,8 @@ SOURCES += \
 
 HEADERS += \
     bomlistmodel.h \
-    core/settings.h \
     core/layer.h \
+    core/schSettings.h \
     documenttreemodel.h \
     eagle/brd/ebrdpad.h \
     eagle/brd/ebrdvia.h \

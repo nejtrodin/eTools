@@ -74,7 +74,7 @@ void ESymbol::setDomElement(QDomElement rootElement)
         qDebug() << "Parse error. Line:" << mElement.lineNumber();
 }
 
-void ESymbol::paint(QPainter *painter, Settings *settings)
+void ESymbol::paint(QPainter *painter, SchSettings *settings)
 {
     QVector<ECircle>::iterator iCircle;
     for (iCircle = mCircles.begin(); iCircle != mCircles.end(); ++iCircle) {

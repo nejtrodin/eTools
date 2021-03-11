@@ -5,7 +5,7 @@
 #include <QAbstractTableModel>
 #include "eagle/sch/eschematic.h"
 #include "layerlistmodel.h"
-#include "settings.h"
+#include "schSettings.h"
 
 typedef enum {
     PageSizeA4,
@@ -88,7 +88,7 @@ private:
     SheetSettingsModel *mpSheetSettingsModel;
     LayerListModel *mpLayerListModel;
     ESchematic mESchematic;
-    Settings mSettings;
+    SchSettings mSettings;
 };
 
 #endif // SCHEXPORT_H

@@ -33,26 +33,27 @@ void ECircle::setDomElement(QDomElement rootElement)
         qDebug() << "Parse error. Line:" << mElement.lineNumber();
 }
 
-void ECircle::paint(QPainter *painter, Settings *settings)
+void ECircle::paint(QPainter *painter, SchSettings *settings)
 {
-    if (settings->layers.contains(mLayer) && settings->layers[mLayer].visible) {
+    if (settings->layerIsVisible(mLayer)) {
         painter->save();
         if (mValidFlag) {
             QPen pen = painter->pen();
-            pen.setColor(settings->getColor(mLayer));
-            pen.setWidth(mWidth * settings->schScale);
+            qreal scale = settings->scale();
+            pen.setColor(settings->getLayerColor(mLayer));
+            pen.setWidth(mWidth * scale);
             painter->setPen(pen);
 
             // fill circle if width == 0
             if (mWidth == 0) {
                 QBrush brush = painter->brush();
-                brush.setColor(settings->getColor(mLayer));
+                brush.setColor(settings->getLayerColor(mLayer));
                 brush.setStyle(Qt::SolidPattern);
                 painter->setBrush(brush);
             }
 
-            painter->drawEllipse(QPointF(mX * settings->schScale, -mY * settings->schScale),
-                                 mRadius * settings->schScale, mRadius * settings->schScale);
+            painter->drawEllipse(QPointF(mX * scale, -mY * scale), mRadius * scale,
+                                 mRadius * scale);
         }
         painter->restore();
     }

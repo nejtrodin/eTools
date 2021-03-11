@@ -50,22 +50,22 @@ void ESegment::setDomElement(QDomElement rootElement)
         qDebug() << "Parse error. Line:" << mElement.lineNumber();
 }
 
-void ESegment::paint(QPainter *painter, QString netName, Settings *settings)
+void ESegment::paint(QPainter *painter, QString netName, SchSettings *settings)
 {
+    qreal scale = settings->scale();
+
     QVector<EWire>::iterator iWire;
     for (iWire = mWires.begin(); iWire != mWires.end(); ++iWire) {
         iWire->paint(painter, settings);
     }
 
     painter->save();
-    // junction не имеет назначенного слоя, всегда берется 91-Nets
-    painter->setPen(settings->getColor(91));
-    painter->setBrush(settings->getColor(91));
+    painter->setPen(settings->getLayerColor(settings->netsLayer));
+    painter->setBrush(settings->getLayerColor(settings->netsLayer));
     QVector<Junction>::iterator iJunction;
     for (iJunction = mJunction.begin(); iJunction != mJunction.end(); ++iJunction) {
-        QPointF center(iJunction->x * settings->schScale, -iJunction->y * settings->schScale);
-        painter->drawEllipse(center, junctionSize * settings->schScale,
-                             junctionSize * settings->schScale);
+        QPointF center(iJunction->x * scale, -iJunction->y * scale);
+        painter->drawEllipse(center, junctionSize * scale, junctionSize * scale);
     }
     painter->restore();
 
@@ -112,18 +112,18 @@ void ESegment::paint(QPainter *painter, QString netName, Settings *settings)
         if (labelOnHWire) {
             int angle = text.angle();
             if (angle > 315 ||  (angle >= 0 && angle <= 135)) {
-                text.move(QPointF(0, settings->labelUpOffset));
+                text.move(QPointF(0, settings->labelUpOffset()));
             } else {
-                text.move(QPointF(0, -settings->labelUpOffset));
+                text.move(QPointF(0, -settings->labelUpOffset()));
             }
         } else if (labelOnVWire) {
             int angle = text.angle();
             if (text.mirrored())
                 angle = (angle + 180) % 360;
             if (angle >= 90 && angle < 270) {
-                text.move(QPointF(-settings->labelUpOffset, 0));
+                text.move(QPointF(-settings->labelUpOffset(), 0));
             } else {
-                text.move(QPointF(settings->labelUpOffset, 0));
+                text.move(QPointF(settings->labelUpOffset(), 0));
             }
         }
         text.paint(painter, settings);
