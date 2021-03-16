@@ -75,7 +75,7 @@ void ESchInstance::paint(QPainter *painter, SchSettings *settings, ESchCore *sch
         QPointF pinSymStartPoint =
                 QPointF(iPin->x() * scale, iPin->y() * scale);
         // draw pin line on Symbols layer - 94
-        if (settings->layerIsVisible(settings->pinLayer)) {
+        if (settings->layerIsVisible(settings->symbolsLayer)) {
             QPointF pinSymFinishPoint = pinSymStartPoint
                     + ECommon::rotatePoint(QPointF(iPin->length() * scale, 0), iPin->angle());
 
@@ -91,14 +91,14 @@ void ESchInstance::paint(QPainter *painter, SchSettings *settings, ESchCore *sch
             pinInstFinishPoint.setY(-pinInstFinishPoint.y() - mY * scale);
 
             QPen pen = painter->pen();
-            pen.setColor(settings->getLayerColor(settings->pinLayer));
+            pen.setColor(settings->getLayerColor(settings->symbolsLayer));
             pen.setWidth(pinWidth * scale);
             painter->setPen(pen);
             painter->drawLine(pinInstStartPoint, pinInstFinishPoint);
         }
 
         // draw pin & pad text on Names layer - 95
-        if (settings->layerIsVisible(settings->pinTextLayer)) {
+        if (settings->layerIsVisible(settings->namesLayer)) {
             int pinAngle = iPin->angle() + mAngle;
             while (pinAngle < 0)
                 pinAngle += 360;
@@ -127,7 +127,7 @@ void ESchInstance::paint(QPainter *painter, SchSettings *settings, ESchCore *sch
                 pinTextInstPoint.setY(-pinTextInstPoint.y() - mY * scale);
                 QString pinName = iPin->name().split("@").first();
                 ELabel::drawText(painter, pinTextInstPoint, pinName, settings->pinTextSize(),
-                                 textAngle, pinTextAlign, settings->pinTextLayer, settings);
+                                 textAngle, pinTextAlign, settings->namesLayer, settings);
             }
 
             // pad Text
@@ -163,7 +163,7 @@ void ESchInstance::paint(QPainter *painter, SchSettings *settings, ESchCore *sch
                     padTextInstPoint.rx() -= settings->padYOffset() * scale;
 
                 ELabel::drawText(painter, padTextInstPoint, padName, settings->padTextSize(),
-                                 textAngle, padTextAlign, settings->pinTextLayer, settings);
+                                 textAngle, padTextAlign, settings->namesLayer, settings);
             }
         }  // end drawing pin & pad text
     }
@@ -189,7 +189,7 @@ void ESchInstance::paint(QPainter *painter, SchSettings *settings, ESchCore *sch
     name = name.split("|").first();
     attributes["NAME"] = name;
     if (part.value().isEmpty())
-        attributes["VALUE"] = device.name() + deviceset.name();
+        attributes["VALUE"] = deviceset.name() + device.name();
     else
         attributes["VALUE"] = part.value();
 

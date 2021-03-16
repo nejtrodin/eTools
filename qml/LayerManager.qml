@@ -16,6 +16,13 @@ Frame {
             Layout.alignment: Qt.AlignHCenter
         }
 
+        ComboBox {
+            id: pressetComboBox
+            Layout.fillWidth: true
+            model: layoutModel.pressetList
+            onCurrentTextChanged: layoutModel.selectPresset(currentText);
+        }
+
         Frame {
             Layout.fillWidth: true
             Layout.fillHeight: true

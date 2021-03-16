@@ -101,10 +101,11 @@ void SchExport::exportToPdf(QString filePath, bool colorAsBlack, bool addBorder)
     QPrinter printer(QPrinter::HighResolution);
     QPainter painter;
 
-    const qreal scale = 1200 / 25.4;
-    mSettings.setScale(scale);
-    mpLayerListModel->updateSettings(&mSettings);
-    mSettings.setColorsAsBlack(colorAsBlack);
+    SchSettings printSettings = mSettings;
+    const qreal scale = 1200 / 25.4;  // 1200 dpi / 25,4 mm on inch
+    printSettings.setScale(scale);
+    mpLayerListModel->updateSettings(&printSettings);
+    printSettings.setColorsAsBlack(colorAsBlack);
 
     QList<SheetSetting> sheetSettings = mpSheetSettingsModel->getSettings();
     QList<SheetSetting>::iterator iSettings;
@@ -150,7 +151,7 @@ void SchExport::exportToPdf(QString filePath, bool colorAsBlack, bool addBorder)
             // draw sheet
             painter.save();
             painter.translate(0, pageRect.height());
-            mESchematic.paint(&painter, &mSettings, sheetPage);
+            mESchematic.paint(&painter, &printSettings, sheetPage);
             painter.restore();
 
             if (addBorder) {

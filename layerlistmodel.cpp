@@ -57,9 +57,51 @@ void LayerListModel::setSettings(const SchSettings &settings)
     mSettings = settings;
     mLayers = mSettings.layers();
     endResetModel();
+
+    // fill layer presset
+    mLayerPressets.clear();
+    emit pressetListChanged();  // duct-tape for calling selectPresset() from qml
+
+    LayerPresset defaultPresset;
+    defaultPresset.name = tr("From schematic");
+    foreach(Layer layer, mLayers) {
+        if (layer.visible)
+            defaultPresset.visibleLayers.append(layer.number);
+    }
+    mLayerPressets.insert(defaultPresset.name, defaultPresset);
+
+    LayerPresset printPresset;
+    printPresset.name = tr("For print");
+    printPresset.visibleLayers << settings.netsLayer
+                               << settings.bussesLayer
+                               << settings.symbolsLayer
+                               << settings.namesLayer;
+    mLayerPressets.insert(printPresset.name, printPresset);
+    emit pressetListChanged();
 }
 
 void LayerListModel::updateSettings(SchSettings *settings)
 {
     settings->setLayers(mLayers);
+}
+
+QStringList LayerListModel::pressetList()
+{
+    return mLayerPressets.keys();
+}
+
+void LayerListModel::selectPresset(QString pressetName)
+{
+    if (mLayerPressets.contains(pressetName)) {
+        LayerPresset presset = mLayerPressets[pressetName];
+        beginResetModel();
+        QVector<Layer>::iterator iLayer = mLayers.begin();
+        for(; iLayer != mLayers.end(); ++iLayer) {
+            if (presset.visibleLayers.contains(iLayer->number))
+                iLayer->visible = true;
+            else
+                iLayer->visible = false;
+        }
+        endResetModel();
+    }
 }

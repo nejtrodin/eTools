@@ -9,6 +9,7 @@
 class LayerListModel : public QAbstractTableModel
 {
     Q_OBJECT
+    Q_PROPERTY(QStringList pressetList READ pressetList NOTIFY pressetListChanged)
 
 public:
     enum ItemRoles {
@@ -37,9 +38,21 @@ public:
     void setSettings(const SchSettings &settings);
     void updateSettings(SchSettings *settings);
 
+    QStringList pressetList();
+    Q_INVOKABLE void selectPresset(QString pressetName);
+
+signals:
+    void pressetListChanged();
+
 private:
+    typedef struct {
+        QString name;
+        QVector<int> visibleLayers;
+    } LayerPresset;
+
     QList<Layer> mLayers;
     SchSettings mSettings;
+    QMap<QString, LayerPresset> mLayerPressets;
 };
 
 #endif // LAYERLISTMODEL_H

@@ -35,8 +35,10 @@ public:
     qreal labelUpOffset() const;
 
     static const int netsLayer = 91;
-    static const int pinLayer = 94;
-    static const int pinTextLayer = 95;
+    static const int bussesLayer = 92;
+    static const int symbolsLayer = 94;
+    static const int namesLayer = 95;
+    static const int valuesLayer = 96;
 
 private:
     QFont mFont;
