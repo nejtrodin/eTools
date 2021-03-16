@@ -30,13 +30,18 @@ protected:
     void touchEvent(QTouchEvent *touchEvent) override;
 
 private:
+    typedef struct {
+        QPoint offset;
+        qreal scale;
+    } ViewSettings;
+
     bool mEmptyFlag;
     ESchematic *mpESchematic;
     SchSettings mSettings;
 
     QPoint mPrevMousePoint; // for moveEvent
-    QPoint mPaintOffset;
     QStringList mSheetList;
+    QVector<ViewSettings> mViewSettings;
     int mCurrentSheet;
 };
 

@@ -8,7 +8,6 @@ SchViewItem::SchViewItem(QQuickItem *parent) : QQuickPaintedItem(parent)
 {
     mpESchematic = new ESchematic;
     mEmptyFlag = true;
-    mPaintOffset = QPoint(0, 0);
 
     mSettings.setScale(2);
 
@@ -23,12 +22,17 @@ bool SchViewItem::openFile(QString path)
     if (ok) {
         mEmptyFlag = false;
         mSheetList = mpESchematic->sheetList();
+
+        mViewSettings.clear();
+        for (int i = 0; i < mSheetList.size(); ++i)
+            mViewSettings.append(ViewSettings { .offset = QPoint(0, 0), .scale = 1 });
     } else {
         mEmptyFlag = true;
         mSheetList.clear();
     }
 
     mCurrentSheet = 0;
+    mSettings.setScale(1);
     emit sheetListChanged();
 
     return ok;
@@ -39,7 +43,7 @@ void SchViewItem::paint(QPainter *painter)
     if (!mEmptyFlag) {
         QPen mainPen(QColor::fromRgb(141, 141, 141), 1, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin);
         painter->setPen(mainPen);
-        painter->translate(mPaintOffset + QPoint(0, height()));
+        painter->translate(mViewSettings.at(mCurrentSheet).offset + QPoint(0, height()));
 
         mpESchematic->paint(painter, &mSettings, mCurrentSheet);
     }
@@ -53,6 +57,7 @@ QStringList SchViewItem::sheetList() const
 void SchViewItem::selectSheet(int sheetNumber)
 {
     mCurrentSheet = sheetNumber;
+    mSettings.setScale(mViewSettings.at(mCurrentSheet).scale);
     update();
 }
 
@@ -67,7 +72,7 @@ void SchViewItem::mouseMoveEvent(QMouseEvent *event)
     auto offsetPos = curPos - mPrevMousePoint;
     mPrevMousePoint = curPos;
 
-    mPaintOffset += offsetPos;
+    mViewSettings[mCurrentSheet].offset += offsetPos;
     update();
 }
 
@@ -75,7 +80,7 @@ void SchViewItem::wheelEvent(QWheelEvent *event)
 {
     auto y = event->angleDelta().y();
     QPointF eventPosition = event->position();
-    auto oldScale = mSettings.scale();
+    auto oldScale = mViewSettings.at(mCurrentSheet).scale;
     auto scale = oldScale;
 
     if (y > 0) {
@@ -85,12 +90,13 @@ void SchViewItem::wheelEvent(QWheelEvent *event)
     }
 
     qreal offsetX = eventPosition.x()
-            - (-mPaintOffset.x() + eventPosition.x()) * scale / oldScale;
-    mPaintOffset.rx() = static_cast<int>(offsetX);
+            - (-mViewSettings.at(mCurrentSheet).offset.x() + eventPosition.x()) * scale / oldScale;
+    mViewSettings[mCurrentSheet].offset.rx() = static_cast<int>(offsetX);
     qreal offsetY = eventPosition.y() - height()
-            - (eventPosition.y() - mPaintOffset.y() - height()) * scale / oldScale;
-    mPaintOffset.ry() = static_cast<int>(offsetY);
+            - (eventPosition.y() - mViewSettings.at(mCurrentSheet).offset.y() - height()) * scale / oldScale;
+    mViewSettings[mCurrentSheet].offset.ry() = static_cast<int>(offsetY);
 
+    mViewSettings[mCurrentSheet].scale = scale;
     mSettings.setScale(scale);
     update();
 }
@@ -110,7 +116,7 @@ void SchViewItem::touchEvent(QTouchEvent *touchEvent)
             auto curPos = touchPoint0.pos().toPoint();
             auto offsetPos = curPos - mPrevMousePoint;
             mPrevMousePoint = curPos;
-            mPaintOffset += offsetPos;
+            mViewSettings[mCurrentSheet].offset += offsetPos;
             update();
         } break;
         default:
