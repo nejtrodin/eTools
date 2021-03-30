@@ -4,6 +4,7 @@
 #include <QtQuick/QQuickPaintedItem>
 #include <QtQuick/QQuickItem>
 #include <QTouchEvent>
+#include <QPicture>
 
 #include "eagle/sch/eschematic.h"
 #include "schSettings.h"
@@ -32,7 +33,7 @@ protected:
 private:
     typedef struct {
         QPoint offset;
-        qreal scale;
+        qreal scale;  // if scale == 0 then scale will calculate
     } ViewSettings;
 
     bool mEmptyFlag;
@@ -43,6 +44,9 @@ private:
     QStringList mSheetList;
     QVector<ViewSettings> mViewSettings;
     int mCurrentSheet;
+
+    bool mUpdatePictureFlag = false;
+    QPicture cachedPicture;
 };
 
 #endif // SCHVIEWITEM_H
