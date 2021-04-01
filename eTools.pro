@@ -1,6 +1,7 @@
 QT += quick quickcontrols2
 QT += xml svg
 QT += printsupport
+QT += widgets
 
 CONFIG += c++11
 

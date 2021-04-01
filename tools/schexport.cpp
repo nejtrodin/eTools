@@ -1,5 +1,6 @@
 #include "schexport.h"
 #include <QtPrintSupport/QPrinter>
+#include <QFileDialog>
 
 const qreal borderWidth = 0.25;
 
@@ -175,4 +176,14 @@ void SchExport::exportToPdf(QString filePath, bool colorAsBlack, bool addBorder)
     painter.end();
 
     QDesktopServices::openUrl(QUrl("file:///" + filePath));
+}
+
+QString SchExport::selectOutputFile(QString defaultFile)
+{
+    QString fileName = QFileDialog::getSaveFileName(nullptr, tr("Select file"), defaultFile,
+                                                    tr("Pdf files (*.pdf)"));
+    if (fileName.isEmpty())
+        return defaultFile;
+    else
+        return fileName;
 }

@@ -1,4 +1,4 @@
-#include <QGuiApplication>
+#include <QApplication>
 #include <QQuickStyle>
 #include <QIcon>
 #include <QQmlApplicationEngine>
@@ -16,7 +16,7 @@
 
 int main(int argc, char* argv[])
 {
-    QGuiApplication app(argc, argv);
+    QApplication app(argc, argv);
     app.setOrganizationName("SVD Company");
     app.setOrganizationDomain("svdcompany.com");
     app.setApplicationName("eTools");

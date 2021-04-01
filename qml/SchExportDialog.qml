@@ -1,6 +1,7 @@
 import QtQuick 2.12
 import QtQuick.Controls 2.12
 import QtQuick.Layouts 1.12
+import Qt.labs.platform 1.1
 import ETools 1.0
 
 Item {
@@ -31,6 +32,16 @@ Item {
                     Layout.fillWidth: true
                     selectByMouse: true
                 }
+                Button {
+                    text: qsTr("Select")
+                    onClicked: {
+                        if (Qt.platform.os == "linux")
+                            outFilePath.text = schExport.selectOutputFile(outFilePath.text)
+                        else
+                            fileDialog.open()
+                    }
+                }
+
                 Button {
                     text: qsTr("Export")
                     font.capitalization: Font.MixedCase
@@ -142,5 +153,15 @@ Item {
 
     SchExport {
         id: schExport
+    }
+
+    FileDialog {
+        id: fileDialog
+        title: "Select file"
+        currentFile: "file:///" + outFilePath.text.replace(/^.*[\\\/]/, "")
+        fileMode: FileDialog.SaveFile
+        folder: "file:///" + outFilePath.text.replace(/[\\\/]+[^\\\/]*$/, "")
+        nameFilters: ["Pdf files (*.pdf)"]
+        onAccepted: outFilePath.text = String(fileDialog.file).replace(/file:\/\/\//, "")
     }
 }

@@ -82,6 +82,7 @@ public:
     Q_INVOKABLE SheetSettingsModel *getSheetSettingsModel() { return mpSheetSettingsModel; }
     Q_INVOKABLE LayerListModel *getLayerListModel() { return mpLayerListModel; }
     Q_INVOKABLE void exportToPdf(QString filePath, bool colorAsBlack, bool addBorder);
+    Q_INVOKABLE QString selectOutputFile(QString defaultFile);
 
 private:
     bool mValid = false;
