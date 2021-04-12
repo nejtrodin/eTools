@@ -2,7 +2,7 @@
 #include <QFile>
 #include <QDebug>
 
-bool ESchematic::openFile(QString filePath, SchSettings *settings)
+bool ESchematic::readFile(QString filePath, SchSettings *settings)
 {
     // clear all
     mSheets.clear();
@@ -11,15 +11,15 @@ bool ESchematic::openFile(QString filePath, SchSettings *settings)
     // open new file
     QFile schematicFile(filePath);
     mPath = filePath;
-
     if (!schematicFile.open(QIODevice::ReadOnly)) {
         schematicFile.close();
         return false;
     }
-
     if (!mSchDoc.setContent(&schematicFile)) {
+        schematicFile.close();
         return false;
     }
+    schematicFile.close();
 
     bool parseResult = true;
 

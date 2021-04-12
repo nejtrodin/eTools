@@ -32,7 +32,7 @@ void BomListModel::setSchematicPath(QString path)
     items.clear();
 
     ESchematic eSchematic;
-    eSchematic.openFile(path);
+    eSchematic.readFile(path);
     BomManager bomManager;
     bomManager.setSchematic(&eSchematic);
 

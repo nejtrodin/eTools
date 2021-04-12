@@ -86,6 +86,7 @@ public:
 
 private:
     bool mValid = false;
+    QString mSchFilePath;
     SheetSettingsModel *mpSheetSettingsModel;
     LayerListModel *mpLayerListModel;
     ESchematic mESchematic;

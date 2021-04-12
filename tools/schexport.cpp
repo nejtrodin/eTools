@@ -76,7 +76,8 @@ SchExport::SchExport(QObject *parent) : QObject(parent)
 
 void SchExport::openFile(QString path)
 {
-    mValid = mESchematic.openFile(path, &mSettings);
+    mSchFilePath = path;
+    mValid = mESchematic.readFile(mSchFilePath, &mSettings);
 
     QList<SheetSetting> sheetSettings;
     if (mValid) {
@@ -102,7 +103,8 @@ void SchExport::exportToPdf(QString filePath, bool colorAsBlack, bool addBorder)
     QPrinter printer(QPrinter::HighResolution);
     QPainter painter;
 
-    SchSettings printSettings = mSettings;
+    SchSettings printSettings;
+    mESchematic.readFile(mSchFilePath, &printSettings);
     const qreal scale = 1200 / 25.4;  // 1200 dpi / 25,4 mm on inch
     printSettings.setScale(scale);
     mpLayerListModel->updateSettings(&printSettings);

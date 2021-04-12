@@ -14,7 +14,7 @@ class ESchematic
 {
 public:
     ESchematic() { }
-    bool openFile(QString filePath, SchSettings *settings = nullptr);
+    bool readFile(QString filePath, SchSettings *settings = nullptr);
     void paint(QPainter *painter, SchSettings *settings, int sheetNumber = 0);
     ESchCore getSchCore() { return mSchCore; }
     QStringList sheetList();
