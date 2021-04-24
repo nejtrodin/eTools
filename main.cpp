@@ -13,6 +13,7 @@
 #include "bomlistmodel.h"
 #include "schviewitem.h"
 #include "layerlistmodel.h"
+#include "folderlistmodel.h"
 
 int main(int argc, char* argv[])
 {
@@ -32,6 +33,7 @@ int main(int argc, char* argv[])
     qmlRegisterType<SchViewItem>        ("ETools", 1, 0, "SchViewItem");
     qmlRegisterType<SheetSettingsModel> ("ETools", 1, 0, "SheetSettingsModel");
     qmlRegisterType<LayerListModel>     ("ETools", 1, 0, "LayerListModel");
+    qmlRegisterType<FolderListModel>    ("FolderList", 1, 0, "FolderListModel");
 
     QQmlApplicationEngine engine;
     const QUrl url(QStringLiteral("qrc:/ETools.qml"));

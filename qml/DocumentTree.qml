@@ -7,10 +7,15 @@ import ETools 1.0
 // За основу взят код из http://qt-way-notes.blogspot.com/2010/07/tree-model-qml.html?m=1
 
 ListView {
+    id: documentTree
+
     signal selectFile(var path)
     signal openFile(var path)
 
-    id: documentTree
+    function setProjectPathList(pathList) {
+        documentTreeModel.setProjectPathList(pathList)
+    }
+
     implicitWidth: 100
     implicitHeight: 100
 
@@ -131,9 +136,5 @@ ListView {
 
     DocumentTreeModel {
         id: documentTreeModel
-    }
-
-    function setProjectPaths(paths) {
-        documentTreeModel.setProjectPaths(paths)
     }
 }

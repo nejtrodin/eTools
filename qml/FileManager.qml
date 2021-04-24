@@ -167,8 +167,8 @@ ColumnLayout {
         fileSelected(eFileInfo.getType(), filePath, eFileInfo.getInfo())
     }
 
-    function setProjectPaths(paths) {
-        documentTree.setProjectPaths(paths)
+    function setProjectPathList(pathList) {
+        documentTree.setProjectPathList(pathList)
     }
 
     EFileInfo {

@@ -41,14 +41,15 @@ DocumentTreeModel::DocumentTreeModel(QObject *parent) : QAbstractListModel(paren
     resetItems();
 }
 
-void DocumentTreeModel::setProjectPaths(QString paths)
+void DocumentTreeModel::setProjectPathList(QStringList pathList)
 {
-#ifdef Q_OS_UNIX
-    paths.replace(':', ';');
-    paths.replace("$HOME", qgetenv("HOME"));
-#endif
+    mProjectPathList = pathList;
 
-    projectPathList = paths.split(';', Qt::SkipEmptyParts);
+#ifdef Q_OS_UNIX
+    for(int i = 0; i < pathList.size(); ++i) {
+        mProjectPathList[i].replace("$HOME", qgetenv("HOME"));
+    }
+#endif
 
     beginResetModel();
     resetItems();
@@ -102,7 +103,7 @@ void DocumentTreeModel::openItem(int numIndex)
     emit dataChanged(modelIndex, modelIndex);
 
     if (parentItem->type == DocumentTreeModel::ProjectSectionNode) {
-        foreach (QString path, projectPathList) {
+        foreach (QString path, mProjectPathList) {
             auto childrenItem = new DocumentTreeItem(path, DocumentTreeModel::FolderNode,
                                                      parentItem->level + 1);
             beginInsertRows(QModelIndex(), row, row);

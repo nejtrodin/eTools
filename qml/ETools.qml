@@ -26,14 +26,14 @@ ApplicationWindow {
     Settings {
         id: generalSettings
         category: "General"
-        property string projectPath: ""
+        property variant projectPathList: []
     }
 
     SettingsDialog {
         id: settingsDialog
         onSettingsChanged: {
-            generalSettings.projectPath = settingsDialog.projectPath
-            fileManager.setProjectPaths(settingsDialog.projectPath)
+            generalSettings.projectPathList = settingsDialog.projectPathList
+            fileManager.setProjectPathList(settingsDialog.projectPathList)
         }
     }
 
@@ -80,7 +80,7 @@ ApplicationWindow {
                 ToolTip.visible: hovered
                 ToolTip.text: qsTr("Settings")
                 onClicked: {
-                    settingsDialog.projectPath = generalSettings.projectPath
+                    settingsDialog.projectPathList = generalSettings.projectPathList
                     settingsDialog.open()
                 }
             }
@@ -136,7 +136,7 @@ ApplicationWindow {
                 Layout.fillHeight: true
 
                 Component.onCompleted: {
-                    fileManager.setProjectPaths(generalSettings.projectPath)
+                    fileManager.setProjectPathList(generalSettings.projectPathList)
                 }
 
                 onSelectFile: {

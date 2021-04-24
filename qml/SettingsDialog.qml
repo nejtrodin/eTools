@@ -1,12 +1,13 @@
-import QtQuick 2.12
-import QtQuick.Controls 2.12
-import QtQuick.Controls.Material 2.12
-import QtQuick.Layouts 1.12
+import QtQuick 6.0
+import QtQuick.Controls 6.0
+import QtQuick.Controls.Material 6.0
+import QtQuick.Layouts 6.0
 
 Popup {
     id: settingsDialog
     visible: false
-    width: 600
+    width: Math.min(parent.width * 0.8, 600)
+    height: parent.height * 0.8
     modal: true
     focus: true
     parent: Overlay.overlay
@@ -14,37 +15,63 @@ Popup {
     y: Math.round((parent.height - height) / 2)
     closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutsideParent
 
-    signal settingsChanged()
+    signal settingsChanged
 
-    property alias projectPath: settingsDialog.projectPath
-    property string projectPath: ""
+    property alias projectPathList: projectsFolderList.pathList
 
-    contentItem: ColumnLayout {
-        Frame {
-            Layout.fillWidth: true
-            Layout.margins: 5
-            Material.elevation: 6
-            Label {
-                anchors.centerIn: parent
-                text: qsTr("Settings")
+    contentItem: Item {
+        anchors.fill: parent
+
+        TabBar {
+            id: tabBar
+            anchors.top: parent.top
+            anchors.left: parent.left
+            anchors.right: parent.right
+            TabButton {
+                text: qsTr("Directories")
+                font.capitalization: Font.MixedCase
+            }
+            TabButton {
+                text: qsTr("Schematic")
+                font.capitalization: Font.MixedCase
             }
         }
 
-        RowLayout {
-            Layout.margins: 5
-            Label {
-                text: qsTr("Projects: ")
+        StackLayout {
+            anchors.top: tabBar.bottom
+            anchors.left: parent.left
+            anchors.right: parent.right
+            anchors.bottom: dialogButtons.top
+            currentIndex: tabBar.currentIndex
+            Item {
+                id: directoriesTab
+                GroupBox {
+                    title: qsTr("Projects")
+                    anchors.fill: parent
+                    anchors.margins: 5
+
+                    ScrollView {
+                        anchors.fill: parent
+                        clip: true
+                        contentHeight: projectsFolderList.height
+
+                        FolderList {
+                            id: projectsFolderList
+                            anchors.left: parent.left
+                            anchors.right: parent.right
+                        }
+                    }
+                }
             }
-            TextField {
-                Layout.fillWidth: true
-                text: projectPath
-                onTextChanged: projectPath = text
+            Item {
+                id: schematicTab
             }
         }
 
         Row {
-            Layout.margins: 5
-            Layout.alignment: Qt.AlignHCenter
+            id: dialogButtons
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.bottom: parent.bottom
             spacing: 10
 
             Button {

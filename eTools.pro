@@ -69,6 +69,7 @@ SOURCES += \
     eagle/sch/eschplain.cpp \
     eagle/sch/eschsheet.cpp \
     eagle/sch/esegment.cpp \
+    folderlistmodel.cpp \
     layerlistmodel.cpp \
     schviewitem.cpp \
     tools/bommanager.cpp \
@@ -116,6 +117,7 @@ HEADERS += \
     eagle/sch/eschplain.h \
     eagle/sch/eschsheet.h \
     eagle/sch/esegment.h \
+    folderlistmodel.h \
     layerlistmodel.h \
     schviewitem.h \
     tools/bommanager.h \

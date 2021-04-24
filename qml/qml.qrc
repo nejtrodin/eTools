@@ -14,5 +14,6 @@
         <file>SchExportDialog.qml</file>
         <file>ETools.qml</file>
         <file>LayerManager.qml</file>
+        <file>FolderList.qml</file>
     </qresource>
 </RCC>

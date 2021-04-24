@@ -43,7 +43,7 @@ public:
         return roles;
     }
 
-    Q_INVOKABLE void setProjectPaths(QString paths);
+    Q_INVOKABLE void setProjectPathList(QStringList pathList);
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
     int rowCount(const QModelIndex &parent = QModelIndex()) const;
 
@@ -55,7 +55,7 @@ private:
     void resetItems();
 
     QList<DocumentTreeItem *> items;
-    QStringList projectPathList;
+    QStringList mProjectPathList;
 };
 
 #endif // DOCUMENTTREEMODEL_H
