@@ -58,7 +58,7 @@ void ESchInstance::setDomElement(QDomElement rootElement)
 void ESchInstance::paint(QPainter *painter, SchSettings *settings, ESchCore *schCore)
 {
     ESchPart part = schCore->getPart(mPartName);
-    ELibrary library = schCore->getLibrary(part.library());
+    ELibrary library = schCore->getLibrary(part.library(), part.libraryUrn());
     EDeviceset deviceset = library.getDeviceset(part.deviceset());
     QString technologyName = part.technology();
     EGate gate = deviceset.getGate(mGate);

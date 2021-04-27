@@ -12,6 +12,7 @@ public:
     ELibrary() { }
     void setDomElement(QDomElement rootElement) override;
     QString name() { return mLibraryName; }
+    QString urn() { return mUrn; }
     bool isEmpty() { return emptyFlag; }
     EDeviceset getDeviceset(QString devicesetName);
     ESymbol getSymbol(QString symbolName);
@@ -20,6 +21,7 @@ public:
 private:
     bool emptyFlag = true;
     QString mLibraryName;
+    QString mUrn;
     QMap<QString, EDeviceset> mDevicesets;
     QVector<EPackage> mPackages;
     QMap<QString, ESymbol> mSymbols;

@@ -11,12 +11,18 @@ void ESchCore::appendLibrary(ELibrary library)
     mLibraries.insert(library.name(), library);
 }
 
-ELibrary ESchCore::getLibrary(QString libraryName)
+ELibrary ESchCore::getLibrary(QString name, QString urn)
 {
-    if (mLibraries.contains(libraryName))
-        return mLibraries[libraryName];
-    else
-        return ELibrary();
+    if (mLibraries.contains(name)) {
+        QList<ELibrary> libraries = mLibraries.values(name);
+        QList<ELibrary>::iterator iLibrary;
+        for (iLibrary = libraries.begin(); iLibrary != libraries.end(); ++iLibrary) {
+            if (iLibrary->urn() == urn)
+                return *iLibrary;
+        }
+    }
+
+    return ELibrary();
 }
 
 void ESchCore::appendPart(ESchPart part)

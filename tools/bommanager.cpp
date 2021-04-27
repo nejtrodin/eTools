@@ -43,8 +43,7 @@ void BomManager::createBomFromSchematic()
     ESchCore schCore = schematic->getSchCore();
 
     foreach (ESchPart part, schCore.getParts()) {
-        auto libraryName = part.library();
-        auto library = schCore.getLibrary(libraryName);
+        auto library = schCore.getLibrary(part.library(), part.libraryUrn());
         auto deviceset = library.getDeviceset(part.deviceset());
         auto device = deviceset.getDevice(part.device());
 

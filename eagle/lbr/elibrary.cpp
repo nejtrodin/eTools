@@ -12,6 +12,7 @@ void ELibrary::setDomElement(QDomElement rootElement)
 
     if (!mElement.isNull() && mElement.tagName() == "library") {
         mLibraryName = mElement.attribute("name");
+        mUrn = mElement.attribute("urn");
         emptyFlag = false;
 
         // packages

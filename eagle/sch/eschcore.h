@@ -13,13 +13,13 @@ public:
     ESchCore() { }
     void clear();
     void appendLibrary(ELibrary library);
-    ELibrary getLibrary(QString libraryName);
+    ELibrary getLibrary(QString name, QString urn);
     void appendPart(ESchPart part);
     ESchPart getPart(QString partName);
     QVector<ESchPart> getParts();
 
 private:
-    QMap<QString, ELibrary> mLibraries;
+    QMultiMap<QString, ELibrary> mLibraries;
     QMap<QString, ESchPart> mParts; // key: part name
 };
 

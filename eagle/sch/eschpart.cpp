@@ -9,6 +9,7 @@ void ESchPart::setDomElement(QDomElement rootElement)
         mValidFlag = true;
         mName = mElement.attribute("name");
         mLibrary = mElement.attribute("library");
+        mLibraryUrn = mElement.attribute("library_urn");
         mDevicesetName = mElement.attribute("deviceset");
         mDeviceName = mElement.attribute("device");
         mValue = mElement.attribute("value", "");

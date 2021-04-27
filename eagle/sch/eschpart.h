@@ -12,6 +12,7 @@ public:
     void setDomElement(QDomElement rootElement) override;
     QString name() { return mName; }
     QString library() { return mLibrary; }
+    QString libraryUrn() { return mLibraryUrn; }
     QString deviceset() { return mDevicesetName; }
     QString device() { return mDeviceName; }
     QString value() { return mValue; }
@@ -22,6 +23,7 @@ public:
 private:
     QString mName;
     QString mLibrary;
+    QString mLibraryUrn;
     QString mDevicesetName;
     QString mDeviceName;
     QString mValue;
