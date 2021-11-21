@@ -133,9 +133,9 @@ double ECommon::textSizeToMilimeters(QString text, bool *ok)
     double result = 0;
 
     if (text.right(2) == "mm") {
-        result = text.left(text.size() - 2).toDouble(ok);
+        result = text.first(text.size() - 2).toDouble(ok);
     } else if (text.right(3) == "mil") {
-        result = 0.0254 * text.left(text.size() - 3).toDouble(ok);
+        result = 0.0254 * text.first(text.size() - 3).toDouble(ok);
     } else {
         *ok = false;
     }

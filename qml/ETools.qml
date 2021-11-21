@@ -204,6 +204,10 @@ ApplicationWindow {
                     mainStackView.push(schExportDialog)
                     schExportDialog.exportFile(path)
                 }
+                onOpenBom: {
+                    mainStackView.push(bomView)
+                    bomView.openFile(path)
+                }
             }
 
             BrdManager {
@@ -222,6 +226,11 @@ ApplicationWindow {
 
     SchExportDialog {
         id: schExportDialog
+        visible: false
+    }
+
+    BomView {
+        id: bomView
         visible: false
     }
 }

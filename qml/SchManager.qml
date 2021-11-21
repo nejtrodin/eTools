@@ -9,11 +9,12 @@ Item {
 
     function setFilePath (path) {
         filePath = path
-        bomList.setSchematicPath(filePath)
+        partSelector.setSchematicPath(filePath)
     }
 
     signal openFile(string path)
     signal exportFile(string path)
+    signal openBom(string path)
 
     ColumnLayout {
         id: mainLayout
@@ -38,21 +39,27 @@ Item {
 
             GridLayout {
                 Button {
-                    text: "View"
+                    text:  qsTr("View")
                     font.capitalization: Font.MixedCase
                     onClicked: openFile(filePath)
                 }
 
                 Button {
-                    text: "Export to PDF"
+                    text:  qsTr("Export to PDF")
                     font.capitalization: Font.MixedCase
                     onClicked: exportFile(filePath)
+                }
+
+                Button {
+                    text: qsTr("Part list")
+                    font.capitalization: Font.MixedCase
+                    onClicked: openBom(filePath)
                 }
             }
         }
 
-        BomList {
-            id: bomList
+        PartSelector {
+            id: partSelector
             Layout.fillWidth: true
             Layout.fillHeight: true
             Layout.margins: 5

@@ -72,7 +72,8 @@ SOURCES += \
     folderlistmodel.cpp \
     layerlistmodel.cpp \
     schviewitem.cpp \
-    tools/bommanager.cpp \
+    tools/bom/bomparser.cpp \
+    tools/bom/bomprinter.cpp \
     tools/drillreporter.cpp \
     tools/efileinfo.cpp \
     tools/schexport.cpp \
@@ -120,7 +121,9 @@ HEADERS += \
     folderlistmodel.h \
     layerlistmodel.h \
     schviewitem.h \
-    tools/bommanager.h \
+    tools/bom/bomentry.h \
+    tools/bom/bomparser.h \
+    tools/bom/bomprinter.h \
     tools/drillreporter.h \
     tools/efileinfo.h \
     tools/schexport.h

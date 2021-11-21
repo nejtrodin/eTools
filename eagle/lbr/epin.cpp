@@ -23,14 +23,14 @@ void EPin::setDomElement(QDomElement rootElement)
 
 qreal EPin::parseLengthAttribute(QString lengthValue)
 {
-    if (lengthValue == "long")
-        return 7.62;
-    else if (lengthValue == "middle")
+    if (lengthValue == "middle")
         return 5.08;
     else if (lengthValue == "short")
         return 2.54;
-    else /* point and other */
+    else if (lengthValue == "point")
         return 0;
+    else /* long */
+        return 7.62;
 }
 
 EPin::PinVisible EPin::parseVisibleAttribute(QString visibleValue)

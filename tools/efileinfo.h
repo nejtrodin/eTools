@@ -15,7 +15,7 @@ public:
 
     Q_INVOKABLE void checkFile(QString path);
     void checkFilePath(QString path);
-    Q_INVOKABLE FileType getType() { return type; }
+    Q_INVOKABLE EFileInfo::FileType getType() { return type; }
     Q_INVOKABLE QString getInfo() { return report; }
     Q_INVOKABLE QString getFilePath() { return filePath; }
 

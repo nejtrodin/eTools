@@ -14,6 +14,7 @@ public:
     QString packageName() const { return mPackageName; }
     QList<EConnect> getConnects(QString gateName);
     QList<EValueAttribute> getAttributes(QString technologyName);
+    QString getAttribute(QString technologyName, QString attributeName);
 
 private:
     QString mName;

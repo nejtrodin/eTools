@@ -1,7 +1,7 @@
 #include "esegment.h"
 #include "../eparser.h"
 
-const int junctionSize = 1;
+const qreal junctionSize = 0.6;
 
 void ESegment::setDomElement(QDomElement rootElement)
 {

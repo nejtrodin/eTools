@@ -10,7 +10,8 @@ public:
     ETechnology() { }
     void setDomElement(QDomElement rootElement) override;
     QString name() { return mName; }
-    QList<EValueAttribute> getValueAttributes() { return mValueAttributes.values(); }
+    QString getAttribute(QString attributeName);
+    QList<EValueAttribute> getAttributes() { return mValueAttributes.values(); }
 
 private:
     QString mName;

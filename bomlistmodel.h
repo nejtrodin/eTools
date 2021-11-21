@@ -3,7 +3,13 @@
 
 #include <QAbstractListModel>
 
-class BomListItem;
+struct PartItem
+{
+    QString positions;
+    int qty;
+    QString partName;
+    QString specification;
+};
 
 class BomListModel : public QAbstractListModel
 {
@@ -18,8 +24,9 @@ public:
 
     enum ListItemRoles {
         TypeRole = Qt::UserRole + 1,
-        PartNumberRole,
+        PositionRole,
         NameRole,
+        QtyRole,
     };
 
     explicit BomListModel(QObject *parent = nullptr);
@@ -29,8 +36,9 @@ public:
     {
         QHash<int, QByteArray> roles;
         roles[TypeRole] = "type";
-        roles[PartNumberRole] = "partNumber";
-        roles[NameRole] = "partName";
+        roles[PositionRole] = "positions";
+        roles[NameRole] = "name";
+        roles[QtyRole] = "quantity";
         return roles;
     }
 
@@ -39,7 +47,7 @@ public:
     int rowCount(const QModelIndex &parent = QModelIndex()) const;
 
 private:
-    QList<BomListItem *> items;
+    QList<PartItem *> parts;
 };
 
 #endif // BOMLISTMODEL_H

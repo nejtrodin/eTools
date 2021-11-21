@@ -8,6 +8,7 @@
 #include "tools/drillreporter.h"
 #include "tools/efileinfo.h"
 #include "tools/schexport.h"
+#include "tools/bom/bomprinter.h"
 
 #include "documenttreemodel.h"
 #include "bomlistmodel.h"
@@ -34,6 +35,7 @@ int main(int argc, char* argv[])
     qmlRegisterType<SheetSettingsModel> ("ETools", 1, 0, "SheetSettingsModel");
     qmlRegisterType<LayerListModel>     ("ETools", 1, 0, "LayerListModel");
     qmlRegisterType<FolderListModel>    ("FolderList", 1, 0, "FolderListModel");
+    qmlRegisterType<BomPrinter>         ("ETools", 1, 0, "BomPrinter");
 
     QQmlApplicationEngine engine;
     const QUrl url(QStringLiteral("qrc:/ETools.qml"));

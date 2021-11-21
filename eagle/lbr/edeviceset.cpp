@@ -13,6 +13,12 @@ void EDeviceset::setDomElement(QDomElement rootElement)
         QDomElement descriptionElement = mElement.firstChildElement("description");
         mDescription = descriptionElement.text();
 
+        QString uservalueString = mElement.attribute("uservalue");
+        if (uservalueString == "yes")
+            mUservalue = true;
+        else
+            mUservalue = false;
+
         // gates
         QDomElement gatesElement = mElement.firstChildElement("gates");
         if (!gatesElement.isNull()) {

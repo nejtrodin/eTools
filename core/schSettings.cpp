@@ -79,6 +79,11 @@ qreal SchSettings::pinTextSize() const
     return mPinTextSize;
 }
 
+void SchSettings::setPinTextSize(qreal size)
+{
+    mPinTextSize = size;
+}
+
 qreal SchSettings::padXOffset() const
 {
     return mPadXOffset;

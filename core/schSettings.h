@@ -29,6 +29,7 @@ public:
 
     qreal pinXOffset() const;
     qreal pinTextSize() const;
+    void setPinTextSize(qreal size);
     qreal padXOffset() const;
     qreal padYOffset() const;
     qreal padTextSize() const;

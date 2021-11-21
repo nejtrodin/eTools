@@ -25,3 +25,11 @@ void ETechnology::setDomElement(QDomElement rootElement)
     if (!mValidFlag)
         qDebug() << "Parse error. Line:" << mElement.lineNumber();
 }
+
+QString ETechnology::getAttribute(QString attributeName)
+{
+    if (mValueAttributes.contains(attributeName))
+        return mValueAttributes[attributeName].value();
+    else
+        return QString();
+}

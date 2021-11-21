@@ -53,9 +53,19 @@ QList<EConnect> EDevice::getConnects(QString gateName)
 QList<EValueAttribute> EDevice::getAttributes(QString technologyName)
 {
     if (mTechnologies.contains(technologyName))
-        return mTechnologies[technologyName].getValueAttributes();
+        return mTechnologies[technologyName].getAttributes();
     else {
         QList<EValueAttribute> emptyList;
         return emptyList;
+    }
+}
+
+QString EDevice::getAttribute(QString technologyName, QString attributeName)
+{
+    if (mTechnologies.contains(technologyName)) {
+        return mTechnologies[technologyName].getAttribute(attributeName);
+    }
+    else {
+        return QString();
     }
 }
