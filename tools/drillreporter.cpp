@@ -2,13 +2,13 @@
 
 #include <QUrl>
 
-#include "eagle/brdparser.h"
-#include "eagle/common/ecommon.h"
-#include "eagle/brd/ebrdpad.h"
+#include "eagle/ecommon.h"
+#include "eagle/brd/eelement.h"
 #include "eagle/brd/ebrdvia.h"
-#include "eagle/eelement.h"
+#include "eagle/brd/esignal.h"
 #include "eagle/lbr/elibrary.h"
-#include "eagle/esignal.h"
+#include "eagle/lbr/epad.h"
+
 
 bool compare(double value1, double value2, quint8 precision)
 {
@@ -23,13 +23,16 @@ QVector<DrillEntry> DrillReporter::getDrillTable(EBoard board)
 
     EElement element;
     foreach (element, board.getElements()) {
-        QVector<EBrdPad> pads = element.package().getPads();
-        QVector<EBrdPad>::const_iterator padIterator;
-        for (padIterator = pads.constBegin(); padIterator != pads.constEnd(); ++padIterator)
-            appendDrill(padIterator->getDrill(), padIterator->getTopDiameter(), true,
-                        padIterator->getPosition());
+        ELibrary library = board.getLibrary(element.libraryName());
+        EPackage package = library.getPackage(element.packageName());
 
-        QVector<Hole> holes = element.package().getHoles();
+        QVector<EPad> pads = package.getPads();
+        QVector<EPad>::const_iterator padIterator;
+        for (padIterator = pads.constBegin(); padIterator != pads.constEnd(); ++padIterator)
+            appendDrill(padIterator->drill(), padIterator->topDiameter(), true,
+                        padIterator->position());
+
+        QVector<Hole> holes = package.getHoles();
         QVector<Hole>::const_iterator holeIterator;
         for (holeIterator = holes.constBegin(); holeIterator != holes.constEnd(); ++holeIterator)
             appendDrill(holeIterator->drill, 0, false, holeIterator->pos);
@@ -57,11 +60,9 @@ void DrillReporter::getReport(QString brdFilePath)
 {
     EBoard board;
     ELibrary library;
-    BrdParser parser;
-
     QString report;
 
-    bool parseResult = parser.parse(brdFilePath, &library, &board);
+    bool parseResult = board.readFile(brdFilePath);
     if (parseResult) {
         DrillReporter drillReporter;
         QVector<DrillEntry> table = drillReporter.getDrillTable(board);

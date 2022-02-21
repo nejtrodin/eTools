@@ -33,6 +33,7 @@ EAlign ECommon::parseAlignAttribute(QString value)
 
 bool ECommon::parseRotAttribute(QString value, int *angle, bool *mirror)
 {
+    // process of "rot" paremeter. May be empty or [M]R<angle>
     if (value.isEmpty()) {
         *angle = 0;
         *mirror = false;
@@ -50,6 +51,30 @@ bool ECommon::parseRotAttribute(QString value, int *angle, bool *mirror)
     if (value.size() > 1 && value.at(0) == 'R') {
         value.remove(0, 1);
         *angle = value.toInt(&ok);
+    }
+    return ok;
+}
+
+bool ECommon::parseRotAttribute(QString value, qreal *angle, bool *mirror)
+{
+    // process of "rot" paremeter. May be empty or [M]R<angle>
+    if (value.isEmpty()) {
+        *angle = 0;
+        *mirror = false;
+        return true;
+    }
+
+    if (value.size() > 0 && value.at(0) == 'M') {
+        *mirror = true;
+        value.remove(0, 1);
+    } else {
+        *mirror = false;
+    }
+
+    bool ok = false;
+    if (value.size() > 1 && value.at(0) == 'R') {
+        value.remove(0, 1);
+        *angle = value.toDouble(&ok);
     }
     return ok;
 }

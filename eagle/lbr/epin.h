@@ -1,7 +1,7 @@
 #ifndef EPIN_H
 #define EPIN_H
 
-#include "../common/ecommon.h"
+#include "../ecommon.h"
 #include "schSettings.h"
 #include <QPainter>
 
@@ -16,24 +16,24 @@ public:
     };
 
     void setDomElement(QDomElement rootElement) override;
-    QString name() { return mName; }
-    qreal x() { return mX; }
-    qreal y() { return mY; }
-    qreal length() { return mLength; }
-    int angle() { return mAngle; }
-    PinVisible visible() { return mVisible; }
+    QString name() { return m_name; }
+    qreal x() { return m_x; }
+    qreal y() { return m_y; }
+    qreal length() { return m_length; }
+    int angle() { return m_angle; }
+    PinVisible visible() { return m_visible; }
 
 private:
     qreal parseLengthAttribute(QString lengthValue);
     PinVisible parseVisibleAttribute(QString visibleValue);
 
-    QString mName;
-    qreal mX = 0;
-    qreal mY = 0;
-    qreal mLength = 0;
-    int mAngle = 0;
-    bool mMirrorFlag = false;
-    PinVisible mVisible = VisibleBoth;
+    QString m_name;
+    qreal m_x = 0;
+    qreal m_y = 0;
+    qreal m_length = 0;
+    int m_angle = 0;
+    bool m_mirrorFlag = false;
+    PinVisible m_visible = VisibleBoth;
 };
 
 #endif // EPIN_H

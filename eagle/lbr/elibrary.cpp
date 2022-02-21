@@ -1,44 +1,42 @@
 #include "elibrary.h"
-#include "../eparser.h"
 
 void ELibrary::setDomElement(QDomElement rootElement)
 {
-    mElement = rootElement;
-    mValidFlag = true;
+    m_domElement = rootElement;
+    m_validFlag = true;
 
     mDevicesets.clear();
     mPackages.clear();
     mSymbols.clear();
 
-    if (!mElement.isNull() && mElement.tagName() == "library") {
-        mLibraryName = mElement.attribute("name");
-        mUrn = mElement.attribute("urn");
+    if (!m_domElement.isNull() && m_domElement.tagName() == "library") {
+        mLibraryName = m_domElement.attribute("name");
+        mUrn = m_domElement.attribute("urn");
         emptyFlag = false;
 
         // packages
-        QDomElement packagesElement = mElement.firstChildElement("packages");
+        QDomElement packagesElement = m_domElement.firstChildElement("packages");
         if (!packagesElement.isNull()) {
             QDomElement packageElement = packagesElement.firstChildElement("package");
             while (!packageElement.isNull()) {
-                bool _ok;
-                auto package = EParser::parsePackage(packageElement, mLibraryName, &_ok);
-                if (_ok)
-                    mPackages.append(package);
-                else
-                    mValidFlag = false;
+                EPackage package;
+                package.setDomElement(packageElement);
+                mPackages.insert(package.name(), package);
+
                 packageElement = packageElement.nextSiblingElement("package");
             }
         }
 
         // symbols
-        QDomElement symbolsElement = mElement.firstChildElement("symbols");
+        QDomElement symbolsElement = m_domElement.firstChildElement("symbols");
         if (!symbolsElement.isNull()) {
             QDomElement symbolElement = symbolsElement.firstChildElement("symbol");
             while (!symbolElement.isNull()) {
                 ESymbol symbol;
                 symbol.setDomElement(symbolElement);
-                if (!symbol.isValid())
-                    mValidFlag = false;
+                if (!symbol.isValid()) {
+                    m_validFlag = false;
+                }
                 mSymbols.insert(symbol.name(), symbol);
 
                 symbolElement = symbolElement.nextSiblingElement("symbol");
@@ -46,14 +44,14 @@ void ELibrary::setDomElement(QDomElement rootElement)
         }
 
         // devicesets
-        QDomElement devicesetsElement = mElement.firstChildElement("devicesets");
+        QDomElement devicesetsElement = m_domElement.firstChildElement("devicesets");
         if (!devicesetsElement.isNull()) {
             QDomElement devicesetElement = devicesetsElement.firstChildElement("deviceset");
             while (!devicesetElement.isNull()) {
                 EDeviceset deviceset;
                 deviceset.setDomElement(devicesetElement);
                 if (!deviceset.isValid())
-                    mValidFlag = false;
+                    m_validFlag = false;
                 mDevicesets.insert(deviceset.name(), deviceset);
 
                 devicesetElement = devicesetElement.nextSiblingElement("deviceset");
@@ -61,8 +59,9 @@ void ELibrary::setDomElement(QDomElement rootElement)
         }
     }
 
-    if (!mValidFlag)
-        qDebug() << "Parse error. Line:" << mElement.lineNumber();
+    if (!m_validFlag) {
+        qDebug() << "Parse error. Line:" << m_domElement.lineNumber();
+    }
 }
 
 EDeviceset ELibrary::getDeviceset(QString devicesetName)
@@ -79,4 +78,14 @@ ESymbol ELibrary::getSymbol(QString symbolName)
         return mSymbols[symbolName];
     } else
         return ESymbol();
+}
+
+EPackage ELibrary::getPackage(QString package)
+{
+    if(mPackages.contains(package)) {
+        return mPackages.value(package);
+    }
+    else {
+        return EPackage();
+    }
 }

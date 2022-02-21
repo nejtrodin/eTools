@@ -1,9 +1,9 @@
 #ifndef ESCHPLAIN_H
 #define ESCHPLAIN_H
 
-#include "../common/ecommon.h"
-#include "../common/etext.h"
-#include "../common/ewire.h"
+#include "../ecommon.h"
+#include "../etext.h"
+#include "../ewire.h"
 #include "schSettings.h"
 #include <QPainter>
 
@@ -14,8 +14,8 @@ public:
     void paint(QPainter *painter, SchSettings *settings);
 
 private:
-    QVector<EText> mTexts;
-    QVector<EWire> mWires;
+    QVector<EText> m_texts;
+    QVector<EWire> m_wires;
 };
 
 #endif // ESCHPLAIN_H

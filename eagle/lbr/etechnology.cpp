@@ -2,28 +2,28 @@
 
 void ETechnology::setDomElement(QDomElement rootElement)
 {
-    mElement = rootElement;
-    mValidFlag = false;
+    m_domElement = rootElement;
+    m_validFlag = false;
 
-    if (!mElement.isNull() && mElement.tagName() == "technology") {
-        mValidFlag = true;
-        mName = mElement.attribute("name");
+    if (!m_domElement.isNull() && m_domElement.tagName() == "technology") {
+        m_validFlag = true;
+        mName = m_domElement.attribute("name");
 
         // attributes
-        QDomElement attributeElement = mElement.firstChildElement("attribute");
+        QDomElement attributeElement = m_domElement.firstChildElement("attribute");
         while (!attributeElement.isNull()) {
             EValueAttribute valueAttribute;
             valueAttribute.setDomElement(attributeElement);
             if (!valueAttribute.isValid())
-                mValidFlag = false;
+                m_validFlag = false;
             mValueAttributes.insert(valueAttribute.name(), valueAttribute);
 
             attributeElement = attributeElement.nextSiblingElement("attribute");
         }
     }
 
-    if (!mValidFlag)
-        qDebug() << "Parse error. Line:" << mElement.lineNumber();
+    if (!m_validFlag)
+        qDebug() << "Parse error. Line:" << m_domElement.lineNumber();
 }
 
 QString ETechnology::getAttribute(QString attributeName)

@@ -1,7 +1,7 @@
 #ifndef EDEVICESET_H
 #define EDEVICESET_H
 
-#include "../common/ecommon.h"
+#include "../ecommon.h"
 #include "edevice.h"
 #include "egate.h"
 

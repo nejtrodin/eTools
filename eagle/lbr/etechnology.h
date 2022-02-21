@@ -1,8 +1,8 @@
 #ifndef ETECHNOLOGY_H
 #define ETECHNOLOGY_H
 
-#include "../common/ecommon.h"
-#include "../common/evalueattribute.h"
+#include "../ecommon.h"
+#include "../evalueattribute.h"
 
 class ETechnology : public ECoreElement
 {

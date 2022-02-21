@@ -4,7 +4,7 @@
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
 
-#include "eagle/eboard.h"
+#include "eagle/brd/eboard.h"
 #include "tools/drillreporter.h"
 #include "tools/efileinfo.h"
 #include "tools/schexport.h"

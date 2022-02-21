@@ -1,24 +1,24 @@
 #include "epin.h"
-#include "../eparser.h"
 
 void EPin::setDomElement(QDomElement rootElement)
 {
-    mElement = rootElement;
-    mValidFlag = false;
+    m_domElement = rootElement;
+    m_validFlag = false;
 
-    if (!mElement.isNull() && mElement.tagName() == "pin") {
-        mValidFlag = true;
-        mName = mElement.attribute("name");
-        mX = mElement.attribute("x").toDouble();
-        mY = mElement.attribute("y").toDouble();
-        mLength = parseLengthAttribute(mElement.attribute("length"));
-        mVisible = parseVisibleAttribute(mElement.attribute("visible"));
-        QString rot = mElement.attribute("rot");
-        ECommon::parseRotAttribute(rot, &mAngle, &mMirrorFlag);
+    if (!m_domElement.isNull() && m_domElement.tagName() == "pin") {
+        m_validFlag = true;
+        m_name = m_domElement.attribute("name");
+        m_x = m_domElement.attribute("x").toDouble();
+        m_y = m_domElement.attribute("y").toDouble();
+        m_length = parseLengthAttribute(m_domElement.attribute("length"));
+        m_visible = parseVisibleAttribute(m_domElement.attribute("visible"));
+        QString rot = m_domElement.attribute("rot");
+        ECommon::parseRotAttribute(rot, &m_angle, &m_mirrorFlag);
     }
 
-    if (!mValidFlag)
-        qDebug() << "Parse error. Line:" << mElement.lineNumber();
+    if (!m_validFlag) {
+        qDebug() << "Parse error. Line:" << m_domElement.lineNumber();
+    }
 }
 
 qreal EPin::parseLengthAttribute(QString lengthValue)

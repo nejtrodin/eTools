@@ -2,24 +2,26 @@
 #define EBRDVIA_H
 
 #include <QtCore>
+#include "../ecommon.h"
 
-class EBrdVia
+class EBrdVia : public ECoreElement
 {
 public:
     EBrdVia() {}
-    EBrdVia(double x, double y, double drill, double diameter);
+    void setDomElement(QDomElement rootElement) override;
+    void update();
 
-    QPointF getPosition() const {return position;}
-    double getDrill() const {return drill;}
-    double getOuterDiameter() const {return outerDiameter;}
-    double getInnerDiameter() const {return innerDiameter;}
+    QPointF getPosition() const {return m_position;}
+    double getDrill() const {return m_drill;}
+    double getOuterDiameter() const {return m_outerDiameter;}
+    double getInnerDiameter() const {return m_innerDiameter;}
 
 private:
-    QPointF position;
-    double drill;
-    double diameter;
-    double outerDiameter;
-    double innerDiameter;
+    QPointF m_position;
+    double m_drill;
+    double m_diameter;
+    double m_outerDiameter;
+    double m_innerDiameter;
 };
 
 #endif // EBRDVIA_H

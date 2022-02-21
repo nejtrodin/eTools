@@ -3,39 +3,39 @@
 
 void EWire::setDomElement(QDomElement rootElement)
 {
-    mElement = rootElement;
-    mValidFlag = true;
+    m_domElement = rootElement;
+    m_validFlag = true;
 
-    if (!mElement.isNull() && mElement.tagName() == "wire") {
+    if (!m_domElement.isNull() && m_domElement.tagName() == "wire") {
         bool _ok = false;
 
-        mX1 = mElement.attribute("x1").toDouble(&_ok);
+        mX1 = m_domElement.attribute("x1").toDouble(&_ok);
         if (!_ok)
-            mValidFlag = false;
+            m_validFlag = false;
 
-        mY1 = mElement.attribute("y1").toDouble(&_ok);
+        mY1 = m_domElement.attribute("y1").toDouble(&_ok);
         if (!_ok)
-            mValidFlag = false;
+            m_validFlag = false;
 
-        mX2 = mElement.attribute("x2").toDouble(&_ok);
+        mX2 = m_domElement.attribute("x2").toDouble(&_ok);
         if (!_ok)
-            mValidFlag = false;
+            m_validFlag = false;
 
-        mY2 = mElement.attribute("y2").toDouble(&_ok);
+        mY2 = m_domElement.attribute("y2").toDouble(&_ok);
         if (!_ok)
-            mValidFlag = false;
+            m_validFlag = false;
 
-        mWidth = mElement.attribute("width").toDouble(&_ok);
+        mWidth = m_domElement.attribute("width").toDouble(&_ok);
         if (!_ok)
-            mValidFlag = false;
+            m_validFlag = false;
 
-        mLayer = mElement.attribute("layer").toInt(&_ok);
+        mLayer = m_domElement.attribute("layer").toInt(&_ok);
         if (!_ok)
-            mValidFlag = false;
+            m_validFlag = false;
 
-        mCurve = mElement.attribute("curve", "0").toDouble(&_ok);
+        mCurve = m_domElement.attribute("curve", "0").toDouble(&_ok);
         if (!_ok)
-            mValidFlag = false;
+            m_validFlag = false;
     }
 }
 
@@ -45,7 +45,7 @@ void EWire::paint(QPainter *painter, SchSettings *settings)
 {
     if (settings->layerIsVisible(mLayer)) {
         painter->save();
-        if (mValidFlag) {
+        if (m_validFlag) {
             QPen pen = painter->pen();
             qreal scale = settings->scale();
             pen.setColor(settings->getLayerColor(mLayer));

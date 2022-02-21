@@ -4,6 +4,7 @@ QT += printsupport
 QT += widgets
 
 CONFIG += c++11
+CONFIG += qtquickcompiler
 
 # The following define makes your compiler emit warnings if you use
 # any Qt feature that has been marked deprecated (the exact warnings
@@ -35,29 +36,27 @@ SOURCES += \
     core/layer.cpp \
     core/schSettings.cpp \
     documenttreemodel.cpp \
-    eagle/brd/ebrdpad.cpp \
-    eagle/brd/ebrdvia.cpp \
+    eagle/eattribute.cpp \
+    eagle/ecircle.cpp \
+    eagle/ecommon.cpp \
+    eagle/drawingtext.cpp \
+    eagle/elayer.cpp \
+    eagle/erectangle.cpp \
+    eagle/etext.cpp \
+    eagle/evalueattribute.cpp \
+    eagle/ewire.cpp \
+    eagle/brd/eelement.cpp \
+    eagle/brd/eboard.cpp \
     eagle/brd/edesignrules.cpp \
-    eagle/brdparser.cpp \
-    eagle/common/drawingtext.cpp \
-    eagle/common/eattribute.cpp \
-    eagle/common/ecircle.cpp \
-    eagle/common/ecommon.cpp \
-    eagle/common/elayer.cpp \
-    eagle/common/erectangle.cpp \
-    eagle/common/etext.cpp \
-    eagle/common/evalueattribute.cpp \
-    eagle/common/ewire.cpp \
-    eagle/eboard.cpp \
-    eagle/eelement.cpp \
-    eagle/epackage.cpp \
-    eagle/eparser.cpp \
-    eagle/eplain.cpp \
-    eagle/esignal.cpp \
+    eagle/brd/ebrdplain.cpp \
+    eagle/brd/ebrdvia.cpp \
+    eagle/brd/esignal.cpp \
     eagle/lbr/edevice.cpp \
     eagle/lbr/edeviceset.cpp \
     eagle/lbr/egate.cpp \
     eagle/lbr/elibrary.cpp \
+    eagle/lbr/epackage.cpp \
+    eagle/lbr/epad.cpp \
     eagle/lbr/epin.cpp \
     eagle/lbr/esymbol.cpp \
     eagle/lbr/etechnology.cpp \
@@ -84,29 +83,27 @@ HEADERS += \
     core/layer.h \
     core/schSettings.h \
     documenttreemodel.h \
-    eagle/brd/ebrdpad.h \
-    eagle/brd/ebrdvia.h \
+    eagle/eattribute.h \
+    eagle/ecircle.h \
+    eagle/ecommon.h \
+    eagle/drawingtext.h \
+    eagle/elayer.h \
+    eagle/erectangle.h \
+    eagle/etext.h \
+    eagle/evalueattribute.h \
+    eagle/ewire.h \
+    eagle/brd/eelement.h \
     eagle/brd/edesignrules.h \
-    eagle/brdparser.h \
-    eagle/common/drawingtext.h \
-    eagle/common/eattribute.h \
-    eagle/common/ecircle.h \
-    eagle/common/ecommon.h \
-    eagle/common/elayer.h \
-    eagle/common/erectangle.h \
-    eagle/common/etext.h \
-    eagle/common/evalueattribute.h \
-    eagle/common/ewire.h \
-    eagle/eboard.h \
-    eagle/eelement.h \
-    eagle/epackage.h \
-    eagle/eparser.h \
-    eagle/eplain.h \
-    eagle/esignal.h \
+    eagle/brd/eboard.h \
+    eagle/brd/ebrdplain.h \
+    eagle/brd/ebrdvia.h \
+    eagle/brd/esignal.h \
     eagle/lbr/edevice.h \
     eagle/lbr/edeviceset.h \
     eagle/lbr/egate.h \
     eagle/lbr/elibrary.h \
+    eagle/lbr/epackage.h \
+    eagle/lbr/epad.h \
     eagle/lbr/epin.h \
     eagle/lbr/esymbol.h \
     eagle/lbr/etechnology.h \

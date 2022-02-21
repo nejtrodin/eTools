@@ -3,21 +3,21 @@
 
 void ERectangle::setDomElement(QDomElement rootElement)
 {
-    mElement = rootElement;
-    mValidFlag = false;
+    m_domElement = rootElement;
+    m_validFlag = false;
 
-    if (!mElement.isNull() && mElement.tagName() == "rectangle") {
-        mValidFlag = true;
-        mX1 = mElement.attribute("x1").toDouble();
-        mY1 = mElement.attribute("y1").toDouble();
-        mX2 = mElement.attribute("x2").toDouble();
-        mY2 = mElement.attribute("y2").toDouble();
-        mLayer = mElement.attribute("layer").toInt();
-        mAngle = mElement.attribute("angle", "0").toDouble();
+    if (!m_domElement.isNull() && m_domElement.tagName() == "rectangle") {
+        m_validFlag = true;
+        mX1 = m_domElement.attribute("x1").toDouble();
+        mY1 = m_domElement.attribute("y1").toDouble();
+        mX2 = m_domElement.attribute("x2").toDouble();
+        mY2 = m_domElement.attribute("y2").toDouble();
+        mLayer = m_domElement.attribute("layer").toInt();
+        mAngle = m_domElement.attribute("angle", "0").toDouble();
     }
 
-    if (!mValidFlag)
-        qDebug() << "Parse error. Line:" << mElement.lineNumber();
+    if (!m_validFlag)
+        qDebug() << "Parse error. Line:" << m_domElement.lineNumber();
 }
 
 void ERectangle::paint(QPainter *painter, SchSettings *settings)

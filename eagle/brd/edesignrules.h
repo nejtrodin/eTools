@@ -4,7 +4,7 @@
 #include <QDomDocument>
 #include <QtCore>
 
-#include "../common/ecommon.h"
+#include "../ecommon.h"
 
 class EDesignRules {
 public:

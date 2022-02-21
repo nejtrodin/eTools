@@ -1,36 +1,36 @@
 #include "eschnet.h"
-#include "../eparser.h"
 
 void ESchNet::setDomElement(QDomElement rootElement)
 {
-    mElement = rootElement;
-    mValidFlag = false;
-    mSegments.clear();
+    m_domElement = rootElement;
+    m_validFlag = false;
+    m_segments.clear();
 
-    if (!mElement.isNull() /*&& mElement.tagName() == "net"*/) {
-        mValidFlag = true;
-        mName = mElement.attribute("name");
+    if (!m_domElement.isNull() && m_domElement.tagName() == "net") {
+        m_validFlag = true;
+        m_name = m_domElement.attribute("name");
 
-        QDomElement segmentElement = mElement.firstChildElement("segment");
+        QDomElement segmentElement = m_domElement.firstChildElement("segment");
         while (!segmentElement.isNull()) {
             ESegment segment;
             segment.setDomElement(segmentElement);
             if (!segment.isValid())
-                mValidFlag = false;
-            mSegments.append(segment);
+                m_validFlag = false;
+            m_segments.append(segment);
 
             segmentElement = segmentElement.nextSiblingElement("segment");
         }
     }
 
-    if (!mValidFlag)
-        qDebug() << "Parse error. Line:" << mElement.lineNumber();
+    if (!m_validFlag) {
+        qDebug() << "Parse error. Line:" << m_domElement.lineNumber();
+    }
 }
 
 void ESchNet::paint(QPainter *painter, SchSettings *settings)
 {
     QVector<ESegment>::iterator iSegment;
-    for (iSegment = mSegments.begin(); iSegment != mSegments.end(); ++iSegment) {
-        iSegment->paint(painter, mName, settings);
+    for (iSegment = m_segments.begin(); iSegment != m_segments.end(); ++iSegment) {
+        iSegment->paint(painter, m_name, settings);
     }
 }

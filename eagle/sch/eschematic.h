@@ -1,8 +1,8 @@
 #ifndef ESCHEMATIC_H
 #define ESCHEMATIC_H
 
-#include "../common/ecommon.h"
-#include "../common/elayer.h"
+#include "../ecommon.h"
+#include "../elayer.h"
 #include "../lbr/elibrary.h"
 #include "eschcore.h"
 #include "eschpart.h"

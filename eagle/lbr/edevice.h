@@ -1,7 +1,7 @@
 #ifndef EDEVICE_H
 #define EDEVICE_H
 
-#include "../common/ecommon.h"
+#include "../ecommon.h"
 #include "etechnology.h"
 #include <QtCore>
 

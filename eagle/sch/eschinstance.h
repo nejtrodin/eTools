@@ -1,7 +1,7 @@
 #ifndef ESCHINSTANCE_H
 #define ESCHINSTANCE_H
 
-#include "../common/eattribute.h"
+#include "../eattribute.h"
 #include "eschcore.h"
 #include "schSettings.h"
 #include <QPicture>
@@ -14,16 +14,16 @@ public:
     void paint(QPainter *painter, SchSettings *settings, ESchCore *schCore);
 
 private:
-    QString mPartName;
-    QString mGate;
-    qreal mX = 0;
-    qreal mY = 0;
-    bool mSmashed = false;
-    bool mMirrorFlag = false;
-    int mAngle = 0;
+    QString m_partName;
+    QString m_gate;
+    qreal m_x = 0;
+    qreal m_y = 0;
+    bool m_smashed = false;
+    bool m_mirrorFlag = false;
+    int m_angle = 0;
 
-    QPicture mInstancePicture;
-    QVector<EAttribute> mAttributes;
+    QPicture m_instancePicture;
+    QVector<EAttribute> m_attributes;
 };
 
 #endif // ESCHINSTANCE_H

@@ -13,9 +13,9 @@ public:
     void paint(QPainter *painter, SchSettings *settings);
 
 private:
-    QString mName;
+    QString m_name;
 
-    QVector<ESegment> mSegments;
+    QVector<ESegment> m_segments;
 };
 
 #endif // ENET_H

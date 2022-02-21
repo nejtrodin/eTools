@@ -2,25 +2,25 @@
 
 void EDeviceset::setDomElement(QDomElement rootElement)
 {
-    mElement = rootElement;
-    mValidFlag = true;
+    m_domElement = rootElement;
+    m_validFlag = true;
     mGates.clear();
     mDevices.clear();
 
-    if (!mElement.isNull() && mElement.tagName() == "deviceset") {
-        mName = mElement.attribute("name");
-        mPrefix = mElement.attribute("prefix");
-        QDomElement descriptionElement = mElement.firstChildElement("description");
+    if (!m_domElement.isNull() && m_domElement.tagName() == "deviceset") {
+        mName = m_domElement.attribute("name");
+        mPrefix = m_domElement.attribute("prefix");
+        QDomElement descriptionElement = m_domElement.firstChildElement("description");
         mDescription = descriptionElement.text();
 
-        QString uservalueString = mElement.attribute("uservalue");
+        QString uservalueString = m_domElement.attribute("uservalue");
         if (uservalueString == "yes")
             mUservalue = true;
         else
             mUservalue = false;
 
         // gates
-        QDomElement gatesElement = mElement.firstChildElement("gates");
+        QDomElement gatesElement = m_domElement.firstChildElement("gates");
         if (!gatesElement.isNull()) {
             QDomElement gateElement = gatesElement.firstChildElement("gate");
             while (!gateElement.isNull()) {
@@ -34,7 +34,7 @@ void EDeviceset::setDomElement(QDomElement rootElement)
         }
 
         // devices
-        QDomElement devicesElement = mElement.firstChildElement("devices");
+        QDomElement devicesElement = m_domElement.firstChildElement("devices");
         if (!devicesElement.isNull()) {
             // device
             QDomElement deviceElement = devicesElement.firstChildElement("device");
@@ -42,7 +42,7 @@ void EDeviceset::setDomElement(QDomElement rootElement)
                 EDevice device;
                 device.setDomElement(deviceElement);
                 if (!device.isValid())
-                    mValidFlag = false;
+                    m_validFlag = false;
                 mDevices.insert(device.name(), device);
 
                 deviceElement = deviceElement.nextSiblingElement("device");
@@ -50,8 +50,8 @@ void EDeviceset::setDomElement(QDomElement rootElement)
         }
     }
 
-    if (!mValidFlag)
-        qDebug() << "Parse error. Line:" << mElement.lineNumber();
+    if (!m_validFlag)
+        qDebug() << "Parse error. Line:" << m_domElement.lineNumber();
 }
 
 EDevice EDeviceset::getDevice(const QString &deviceName)

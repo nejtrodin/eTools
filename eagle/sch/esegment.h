@@ -1,9 +1,9 @@
 #ifndef ESEGMENT_H
 #define ESEGMENT_H
 
-#include "../common/ecommon.h"
-#include "../common/etext.h"
-#include "../common/ewire.h"
+#include "../ecommon.h"
+#include "../etext.h"
+#include "../ewire.h"
 #include "schSettings.h"
 #include <QPainter>
 
@@ -21,9 +21,9 @@ public:
     void paint(QPainter *painter, QString netName, SchSettings *settings);
 
 private:
-    QVector<EWire> mWires;
-    QVector<Junction> mJunction;
-    QVector<ELabel> mLabels;
+    QVector<EWire> m_wires;
+    QVector<Junction> m_junction;
+    QVector<ELabel> m_labels;
 };
 
 #endif // ESEGMENT_H

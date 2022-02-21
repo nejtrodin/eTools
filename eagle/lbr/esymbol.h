@@ -2,10 +2,10 @@
 #define ESYMBOL_H
 
 #include "epin.h"
-#include "../common/ecircle.h"
-#include "../common/erectangle.h"
-#include "../common/etext.h"
-#include "../common/ewire.h"
+#include "../ecircle.h"
+#include "../erectangle.h"
+#include "../etext.h"
+#include "../ewire.h"
 #include "schSettings.h"
 #include <QPainter>
 
@@ -15,17 +15,17 @@ public:
     ESymbol() { }
     void setDomElement(QDomElement rootElement) override;
     void paint(QPainter *painter, SchSettings *settings);
-    QString name() { return mName; }
-    QVector<EPin> getPins() { return mPins; }
-    QVector<EText> getTexts() { return mTexts; }
+    QString name() { return m_name; }
+    QVector<EPin> getPins() { return m_pins; }
+    QVector<EText> getTexts() { return m_texts; }
 
 private:
-    QString mName;
-    QVector<EWire> mWires;
-    QVector<EText> mTexts;
-    QVector<ECircle> mCircles;
-    QVector<EPin> mPins;
-    QVector<ERectangle> mRectangles;
+    QString m_name;
+    QVector<EWire> m_wires;
+    QVector<EText> m_texts;
+    QVector<ECircle> m_circles;
+    QVector<EPin> m_pins;
+    QVector<ERectangle> m_rectangles;
 };
 
 #endif // ESYMBOL_H

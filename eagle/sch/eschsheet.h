@@ -1,7 +1,7 @@
 #ifndef ESCHSHEET_H
 #define ESCHSHEET_H
 
-#include "../common/ecommon.h"
+#include "../ecommon.h"
 #include "eschnet.h"
 #include "eschplain.h"
 #include "eschinstance.h"
@@ -15,13 +15,13 @@ public:
     ESchSheet() { }
     void setDomElement(QDomElement rootElement) override;
     void paint(QPainter *painter, SchSettings *settings, ESchCore *schCore);
-    QString description() { return mDescription; }
+    QString description() { return m_description; }
 
 private:
-    QString mDescription;
-    QVector<ESchNet> mNets;
-    QVector<ESchInstance> mInstances;
-    ESchPlain mPlain;
+    QString m_description;
+    QVector<ESchNet> m_nets;
+    QVector<ESchInstance> m_instances;
+    ESchPlain m_plain;
 };
 
 #endif // ESCHSHEET_H

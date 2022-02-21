@@ -2,31 +2,31 @@
 
 void ESchPlain::setDomElement(QDomElement rootElement)
 {
-    mElement = rootElement;
-    mValidFlag = false;
-    mTexts.clear();
+    m_domElement = rootElement;
+    m_validFlag = false;
+    m_texts.clear();
 
-    if (!mElement.isNull() && mElement.tagName() == "plain") {
-        mValidFlag = true;
+    if (!m_domElement.isNull() && m_domElement.tagName() == "plain") {
+        m_validFlag = true;
 
-        QDomElement textElement = mElement.firstChildElement("text");
+        QDomElement textElement = m_domElement.firstChildElement("text");
         while (!textElement.isNull()) {
             EText text;
             text.setDomElement(textElement);
             if (!text.isValid())
-                mValidFlag = false;
-            mTexts.append(text);
+                m_validFlag = false;
+            m_texts.append(text);
 
             textElement = textElement.nextSiblingElement("text");
         }
 
-        QDomElement wireElement = mElement.firstChildElement("wire");
+        QDomElement wireElement = m_domElement.firstChildElement("wire");
         while (!wireElement.isNull()) {
             EWire wire;
             wire.setDomElement(wireElement);
             if (!wire.isValid())
-                mValidFlag = false;
-            mWires.append(wire);
+                m_validFlag = false;
+            m_wires.append(wire);
 
             wireElement = wireElement.nextSiblingElement("wire");
         }
@@ -36,13 +36,13 @@ void ESchPlain::setDomElement(QDomElement rootElement)
 void ESchPlain::paint(QPainter *painter, SchSettings *settings)
 {
     QVector<EText>::iterator iText;
-    for (iText = mTexts.begin(); iText != mTexts.end(); ++iText) {
+    for (iText = m_texts.begin(); iText != m_texts.end(); ++iText) {
         auto drawingText = iText->getDrawingText();
         drawingText.paint(painter, settings);
     }
 
     QVector<EWire>::iterator iWire;
-    for (iWire = mWires.begin(); iWire != mWires.end(); ++iWire) {
+    for (iWire = m_wires.begin(); iWire != m_wires.end(); ++iWire) {
         iWire->paint(painter, settings);
     }
 }

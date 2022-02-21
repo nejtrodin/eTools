@@ -2,83 +2,83 @@
 
 void ESchSheet::setDomElement(QDomElement rootElement)
 {
-    mElement = rootElement;
-    mValidFlag = false;
-    mNets.clear();
+    m_domElement = rootElement;
+    m_validFlag = false;
+    m_nets.clear();
 
-    if (!mElement.isNull() && mElement.tagName() == "sheet") {
-        mValidFlag = true;
+    if (!m_domElement.isNull() && m_domElement.tagName() == "sheet") {
+        m_validFlag = true;
 
-        QDomElement descriptionElement = mElement.firstChildElement("description");
+        QDomElement descriptionElement = m_domElement.firstChildElement("description");
         if (!descriptionElement.isNull())
-            mDescription = descriptionElement.text();
+            m_description = descriptionElement.text();
 
-        QDomElement instancesElement = mElement.firstChildElement("instances");
+        QDomElement instancesElement = m_domElement.firstChildElement("instances");
         if (!instancesElement.isNull()) {
             QDomElement instanceElement = instancesElement.firstChildElement("instance");
             while (!instanceElement.isNull()) {
                 ESchInstance instance;
                 instance.setDomElement(instanceElement);
                 if (!instance.isValid())
-                    mValidFlag = false;
-                mInstances.append(instance);
+                    m_validFlag = false;
+                m_instances.append(instance);
 
                 instanceElement = instanceElement.nextSiblingElement("instance");
             }
         }
 
-        QDomElement netsElement = mElement.firstChildElement("nets");
+        QDomElement netsElement = m_domElement.firstChildElement("nets");
         if (!netsElement.isNull()) {
             QDomElement netElement = netsElement.firstChildElement("net");
             while (!netElement.isNull()) {
                 ESchNet net;
                 net.setDomElement(netElement);
                 if (!net.isValid())
-                    mValidFlag = false;
-                mNets.append(net);
+                    m_validFlag = false;
+                m_nets.append(net);
 
                 netElement = netElement.nextSiblingElement("net");
             }
         }
 
         // FIX: create class for bus
-        QDomElement busesElement = mElement.firstChildElement("busses");
+        QDomElement busesElement = m_domElement.firstChildElement("busses");
         if (!busesElement.isNull()) {
             QDomElement busElement = busesElement.firstChildElement("bus");
             while (!busElement.isNull()) {
                 ESchNet bus;
                 bus.setDomElement(busElement);
                 if (!bus.isValid())
-                    mValidFlag = false;
-                mNets.append(bus);
+                    m_validFlag = false;
+                m_nets.append(bus);
 
                 busElement = busElement.nextSiblingElement("bus");
             }
         }
 
-        QDomElement plainElement = mElement.firstChildElement("plain");
+        QDomElement plainElement = m_domElement.firstChildElement("plain");
         if (!plainElement.isNull()) {
-            mPlain.setDomElement(plainElement);
-            if (!mPlain.isValid())
-                mValidFlag = false;
+            m_plain.setDomElement(plainElement);
+            if (!m_plain.isValid())
+                m_validFlag = false;
         }
     }
 
-    if (!mValidFlag)
-        qDebug() << "Parse error. Line:" << mElement.lineNumber();
+    if (!m_validFlag)
+        qDebug() << "Parse error. Line:" << m_domElement.lineNumber();
 }
 
 void ESchSheet::paint(QPainter *painter, SchSettings *settings, ESchCore *schCore)
 {
-    mPlain.paint(painter, settings);
+    m_plain.paint(painter, settings);
 
     QVector<ESchNet>::iterator iNet;
-    for (iNet = mNets.begin(); iNet != mNets.end(); ++iNet) {
+    for (iNet = m_nets.begin(); iNet != m_nets.end(); ++iNet) {
         iNet->paint(painter, settings);
     }
 
     QVector<ESchInstance>::iterator iInstance;
-    for (iInstance = mInstances.begin(); iInstance != mInstances.end(); ++iInstance) {
+    for (iInstance = m_instances.begin(); iInstance != m_instances.end(); ++iInstance) {
         iInstance->paint(painter, settings, schCore);
     }
 }

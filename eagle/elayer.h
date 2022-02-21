@@ -13,12 +13,6 @@ public:
 
 private:
     Layer mLayer;
-//    int mNumber;
-//    QString mName;
-//    int mColor;
-//    int mFill;
-//    bool mVisible;
-//    bool mActive;
 };
 
 #endif // ELAYER_H

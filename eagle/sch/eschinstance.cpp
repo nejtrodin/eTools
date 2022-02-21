@@ -1,67 +1,66 @@
 #include "eschinstance.h"
-#include "../eparser.h"
-#include "../common/ecommon.h"
-#include "../common/drawingtext.h"
-#include "../common/etext.h"
-#include "../common/evalueattribute.h"
+#include "../ecommon.h"
+#include "../drawingtext.h"
+#include "../etext.h"
+#include "../evalueattribute.h"
 #include <cmath>
 
 const qreal pinWidth = 0.1524;
 
 void ESchInstance::setDomElement(QDomElement rootElement)
 {
-    mElement = rootElement;
-    mValidFlag = false;
-    mAttributes.clear();
-    mInstancePicture = QPicture();
+    m_domElement = rootElement;
+    m_validFlag = false;
+    m_attributes.clear();
+    m_instancePicture = QPicture();
 
-    if (!mElement.isNull() && mElement.tagName() == "instance") {
+    if (!m_domElement.isNull() && m_domElement.tagName() == "instance") {
         bool ok = false;
-        mValidFlag = true;
+        m_validFlag = true;
 
-        mPartName = mElement.attribute("part");
-        mGate = mElement.attribute("gate");
+        m_partName = m_domElement.attribute("part");
+        m_gate = m_domElement.attribute("gate");
 
-        mX = mElement.attribute("x").toDouble(&ok);
+        m_x = m_domElement.attribute("x").toDouble(&ok);
         if (!ok)
-            mValidFlag = false;
+            m_validFlag = false;
 
-        mY = mElement.attribute("y").toDouble(&ok);
+        m_y = m_domElement.attribute("y").toDouble(&ok);
         if (!ok)
-            mValidFlag = false;
+            m_validFlag = false;
 
-        QString smashed = mElement.attribute("smashed");
-        mSmashed = smashed == "yes" ? true : false;
+        QString smashed = m_domElement.attribute("smashed");
+        m_smashed = smashed == "yes" ? true : false;
 
-        QString rot = mElement.attribute("rot");
-        ok = ECommon::parseRotAttribute(rot, &mAngle, &mMirrorFlag);
+        QString rot = m_domElement.attribute("rot");
+        ok = ECommon::parseRotAttribute(rot, &m_angle, &m_mirrorFlag);
         if (!ok)
-            mValidFlag = false;
+            m_validFlag = false;
 
         // attributes
-        QDomElement attributeElement = mElement.firstChildElement("attribute");
+        QDomElement attributeElement = m_domElement.firstChildElement("attribute");
         while (!attributeElement.isNull()) {
             EAttribute attribute;
             attribute.setDomElement(attributeElement);
             if (!attribute.isValid())
-                mValidFlag = false;
-            mAttributes.append(attribute);
+                m_validFlag = false;
+            m_attributes.append(attribute);
 
             attributeElement = attributeElement.nextSiblingElement("attribute");
         }
     }
 
-    if (!mValidFlag)
-        qDebug() << "Parse error. Line:" << mElement.lineNumber();
+    if (!m_validFlag)
+        qDebug() << "Parse error. Line:" << m_domElement.lineNumber();
 }
 
 void ESchInstance::paint(QPainter *painter, SchSettings *settings, ESchCore *schCore)
 {
-    ESchPart part = schCore->getPart(mPartName);
+    ESchPart part = schCore->getPart(m_partName);
     ELibrary library = schCore->getLibrary(part.library(), part.libraryUrn());
     EDeviceset deviceset = library.getDeviceset(part.deviceset());
     QString technologyName = part.technology();
-    EGate gate = deviceset.getGate(mGate);
+    EGate gate = deviceset.getGate(m_gate);
     ESymbol symbol = library.getSymbol(gate.symbol());
     EDevice device = deviceset.getDevice(part.device());
     QList<EConnect> connects = device.getConnects(gate.name());
@@ -79,16 +78,16 @@ void ESchInstance::paint(QPainter *painter, SchSettings *settings, ESchCore *sch
             QPointF pinSymFinishPoint = pinSymStartPoint
                     + ECommon::rotatePoint(QPointF(iPin->length() * scale, 0), iPin->angle());
 
-            QPointF pinInstStartPoint = ECommon::rotatePoint(pinSymStartPoint, mAngle);
-            QPointF pinInstFinishPoint = ECommon::rotatePoint(pinSymFinishPoint, mAngle);
-            if (mMirrorFlag) {
+            QPointF pinInstStartPoint = ECommon::rotatePoint(pinSymStartPoint, m_angle);
+            QPointF pinInstFinishPoint = ECommon::rotatePoint(pinSymFinishPoint, m_angle);
+            if (m_mirrorFlag) {
                 pinInstStartPoint.setX(-pinInstStartPoint.x());
                 pinInstFinishPoint.setX(-pinInstFinishPoint.x());
             }
-            pinInstStartPoint.setX(pinInstStartPoint.x() + mX * scale);
-            pinInstStartPoint.setY(-pinInstStartPoint.y() - mY * scale);
-            pinInstFinishPoint.setX(pinInstFinishPoint.x() + mX * scale);
-            pinInstFinishPoint.setY(-pinInstFinishPoint.y() - mY * scale);
+            pinInstStartPoint.setX(pinInstStartPoint.x() + m_x * scale);
+            pinInstStartPoint.setY(-pinInstStartPoint.y() - m_y * scale);
+            pinInstFinishPoint.setX(pinInstFinishPoint.x() + m_x * scale);
+            pinInstFinishPoint.setY(-pinInstFinishPoint.y() - m_y * scale);
 
             QPen pen = painter->pen();
             pen.setColor(settings->getLayerColor(settings->symbolsLayer));
@@ -99,11 +98,14 @@ void ESchInstance::paint(QPainter *painter, SchSettings *settings, ESchCore *sch
 
         // draw pin & pad text on Names layer - 95
         if (settings->layerIsVisible(settings->namesLayer)) {
-            int pinAngle = iPin->angle() + mAngle;
-            while (pinAngle < 0)
+            int pinAngle = iPin->angle() + m_angle;
+            while (pinAngle < 0) {
                 pinAngle += 360;
-            if (mMirrorFlag && (mAngle <= 45 || mAngle > 315 || (mAngle > 135 && mAngle <= 225)))
+            }
+            if (m_mirrorFlag &&
+                    (m_angle <= 45 || m_angle > 315 || (m_angle > 135 && m_angle <= 225))) {
                 pinAngle += 180;
+            }
             pinAngle = pinAngle % 360;
             qreal textAngle = 0;
             if ((pinAngle > 45 && pinAngle <= 135) || (pinAngle > 225 && pinAngle <= 315))
@@ -120,11 +122,11 @@ void ESchInstance::paint(QPainter *painter, SchSettings *settings, ESchCore *sch
                         + ECommon::rotatePoint(
                                 QPointF((iPin->length() + settings->pinXOffset()) * scale, 0),
                                 iPin->angle());
-                QPointF pinTextInstPoint = ECommon::rotatePoint(pinTextSymPoint, mAngle);
-                if (mMirrorFlag)
+                QPointF pinTextInstPoint = ECommon::rotatePoint(pinTextSymPoint, m_angle);
+                if (m_mirrorFlag)
                     pinTextInstPoint.setX(-pinTextInstPoint.x());
-                pinTextInstPoint.setX(pinTextInstPoint.x() + mX * scale);
-                pinTextInstPoint.setY(-pinTextInstPoint.y() - mY * scale);
+                pinTextInstPoint.setX(pinTextInstPoint.x() + m_x * scale);
+                pinTextInstPoint.setY(-pinTextInstPoint.y() - m_y * scale);
                 QString pinName = iPin->name().split("@").first();
                 ELabel::drawText(painter, pinTextInstPoint, pinName, settings->pinTextSize(),
                                  textAngle, pinTextAlign, settings->namesLayer, settings);
@@ -151,11 +153,11 @@ void ESchInstance::paint(QPainter *painter, SchSettings *settings, ESchCore *sch
                         + ECommon::rotatePoint(
                                 QPointF((iPin->length() - settings->padXOffset()) * scale, 0),
                                 iPin->angle());
-                QPointF padTextInstPoint = ECommon::rotatePoint(padTextSymPoint, mAngle);
-                if (mMirrorFlag)
+                QPointF padTextInstPoint = ECommon::rotatePoint(padTextSymPoint, m_angle);
+                if (m_mirrorFlag)
                     padTextInstPoint.setX(-padTextInstPoint.x());
-                padTextInstPoint.setX(padTextInstPoint.x() + mX * scale);
-                padTextInstPoint.setY(-padTextInstPoint.y() - mY * scale);
+                padTextInstPoint.setX(padTextInstPoint.x() + m_x * scale);
+                padTextInstPoint.setY(-padTextInstPoint.y() - m_y * scale);
 
                 if (textAngle == 0)
                     padTextInstPoint.ry() -= settings->padYOffset() * scale;
@@ -193,8 +195,8 @@ void ESchInstance::paint(QPainter *painter, SchSettings *settings, ESchCore *sch
     else
         attributes["VALUE"] = part.value();
 
-    if (mSmashed) {
-        foreach (EAttribute attribute, mAttributes) {
+    if (m_smashed) {
+        foreach (EAttribute attribute, m_attributes) {
             DrawingText attributeText(QPointF(0, 0), attribute.size(), attribute.angle(),
                                       attribute.align(), attribute.layer(),
                                       attributes[attribute.name()]);
@@ -212,14 +214,14 @@ void ESchInstance::paint(QPainter *painter, SchSettings *settings, ESchCore *sch
     for (iText = texts.begin(); iText != texts.end(); ++iText) {
         DrawingText drawingText = iText->getDrawingText();
 
-        drawingText.rotate(mAngle);
-        if (mMirrorFlag)
+        drawingText.rotate(m_angle);
+        if (m_mirrorFlag)
             drawingText.mirror();
-        drawingText.move(QPointF(mX, mY));
+        drawingText.move(QPointF(m_x, m_y));
 
         QString textValue = drawingText.text();
         if (textValue.startsWith('>')) {
-            if (!mSmashed) {
+            if (!m_smashed) {
                 QString attributeName = textValue.mid(1);
                 if (attributes.contains(attributeName))
                     drawingText.setText(attributes[attributeName]);
@@ -233,10 +235,10 @@ void ESchInstance::paint(QPainter *painter, SchSettings *settings, ESchCore *sch
     }
 
     painter->save();
-    painter->translate(mX * scale, -mY * scale);
-    if (mMirrorFlag)
+    painter->translate(m_x * scale, -m_y * scale);
+    if (m_mirrorFlag)
         painter->scale(-1.0, 1.0);
-    painter->rotate(-mAngle);
+    painter->rotate(-m_angle);
     symbol.paint(painter, settings);
 
     painter->restore();

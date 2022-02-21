@@ -2,42 +2,42 @@
 
 void ECircle::setDomElement(QDomElement rootElement)
 {
-    mElement = rootElement;
-    mValidFlag = true;
+    m_domElement = rootElement;
+    m_validFlag = true;
 
-    if (!mElement.isNull() && mElement.tagName() == "circle") {
+    if (!m_domElement.isNull() && m_domElement.tagName() == "circle") {
         bool _ok = false;
 
-        mX = mElement.attribute("x").toDouble(&_ok);
+        mX = m_domElement.attribute("x").toDouble(&_ok);
         if (!_ok)
-            mValidFlag = false;
+            m_validFlag = false;
 
-        mY = mElement.attribute("y").toDouble(&_ok);
+        mY = m_domElement.attribute("y").toDouble(&_ok);
         if (!_ok)
-            mValidFlag = false;
+            m_validFlag = false;
 
-        mRadius = mElement.attribute("radius").toDouble(&_ok);
+        mRadius = m_domElement.attribute("radius").toDouble(&_ok);
         if (!_ok)
-            mValidFlag = false;
+            m_validFlag = false;
 
-        mWidth = mElement.attribute("width").toDouble(&_ok);
+        mWidth = m_domElement.attribute("width").toDouble(&_ok);
         if (!_ok)
-            mValidFlag = false;
+            m_validFlag = false;
 
-        mLayer = mElement.attribute("layer").toInt(&_ok);
+        mLayer = m_domElement.attribute("layer").toInt(&_ok);
         if (!_ok)
-            mValidFlag = false;
+            m_validFlag = false;
     }
 
-    if (!mValidFlag)
-        qDebug() << "Parse error. Line:" << mElement.lineNumber();
+    if (!m_validFlag)
+        qDebug() << "Parse error. Line:" << m_domElement.lineNumber();
 }
 
 void ECircle::paint(QPainter *painter, SchSettings *settings)
 {
     if (settings->layerIsVisible(mLayer)) {
         painter->save();
-        if (mValidFlag) {
+        if (m_validFlag) {
             QPen pen = painter->pen();
             qreal scale = settings->scale();
             pen.setColor(settings->getLayerColor(mLayer));

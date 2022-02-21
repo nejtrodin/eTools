@@ -1,8 +1,8 @@
 #ifndef ESCHPART_H
 #define ESCHPART_H
 
-#include "../common/ecommon.h"
-#include "../common/evalueattribute.h"
+#include "../ecommon.h"
+#include "../evalueattribute.h"
 #include "schSettings.h"
 
 class ESchPart : public ECoreElement
@@ -10,25 +10,25 @@ class ESchPart : public ECoreElement
 public:
     ESchPart() { }
     void setDomElement(QDomElement rootElement) override;
-    QString name() { return mName; }
-    QString library() { return mLibrary; }
-    QString libraryUrn() { return mLibraryUrn; }
-    QString deviceset() { return mDevicesetName; }
-    QString device() { return mDeviceName; }
-    QString value() { return mValue; }
-    QString technology() { return mTechnology; }
+    QString name() { return m_name; }
+    QString library() { return m_library; }
+    QString libraryUrn() { return m_libraryUrn; }
+    QString deviceset() { return m_devicesetName; }
+    QString device() { return m_deviceName; }
+    QString value() { return m_value; }
+    QString technology() { return m_technology; }
     QString getAttribute(QString attributeName);
-    QList<EValueAttribute> getAttributes() { return mValueAttributes.values(); }
+    QList<EValueAttribute> getAttributes() { return m_valueAttributes.values(); }
 
 private:
-    QString mName;
-    QString mLibrary;
-    QString mLibraryUrn;
-    QString mDevicesetName;
-    QString mDeviceName;
-    QString mValue;
-    QString mTechnology;
-    QMap<QString, EValueAttribute> mValueAttributes;
+    QString m_name;
+    QString m_library;
+    QString m_libraryUrn;
+    QString m_devicesetName;
+    QString m_deviceName;
+    QString m_value;
+    QString m_technology;
+    QMap<QString, EValueAttribute> m_valueAttributes;
 };
 
 #endif // ESCHPART_H

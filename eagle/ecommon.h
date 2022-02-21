@@ -1,5 +1,5 @@
-#ifndef EVIA_H
-#define EVIA_H
+#ifndef ECOMMON_H
+#define ECOMMON_H
 
 #include <QtCore>
 #include <QDomElement>
@@ -11,11 +11,11 @@ public:
     ECoreElement() { }
     virtual ~ECoreElement() { }
     virtual void setDomElement(QDomElement rootElement) = 0;
-    bool isValid() { return mValidFlag; }
+    bool isValid() { return m_validFlag; }
 
 protected:
-    QDomElement mElement;
-    bool mValidFlag = false;
+    QDomElement m_domElement;
+    bool m_validFlag = false;
 };
 
 typedef enum {
@@ -35,6 +35,7 @@ class ECommon
 public:
     static EAlign parseAlignAttribute(QString value);
     static bool parseRotAttribute(QString value, int *angle, bool *mirror);
+    static bool parseRotAttribute(QString value, qreal *angle, bool *mirror);
     static EAlign mirrorAlign(EAlign align, qreal angle = 0); // for text
     static QPointF getDrawPosition(qreal height, qreal width, EAlign align);
     static double textSizeToMilimeters(QString text, bool *ok = nullptr);
@@ -58,4 +59,4 @@ struct EConnect
     QString pad;
 };
 
-#endif // EVIA_H
+#endif // ECOMMON_H

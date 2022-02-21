@@ -1,7 +1,7 @@
 #ifndef DRILLREPORTER_H
 #define DRILLREPORTER_H
 
-#include "eagle/eboard.h"
+#include "eagle/brd/eboard.h"
 #include <QtCore>
 
 struct DrillEntry
