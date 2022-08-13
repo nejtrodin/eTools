@@ -21,8 +21,13 @@ ListView {
 
     model: documentTreeModel
 
-    highlight: Rectangle { color: "lightslategrey" }
-    highlightFollowsCurrentItem: true
+    highlight: Rectangle {
+        color: "lightslategrey"
+        height: 32
+        width: documentTree.width
+        y: documentTree.currentItem.y
+    }
+    highlightFollowsCurrentItem: false
 
     delegate: Item {
         id: wrapper
