@@ -1,0 +1,19 @@
+<RCC>
+    <qresource prefix="/">
+        <file>qtquickcontrols2.conf</file>
+        <file>SettingsDialog.qml</file>
+        <file>DrillReport.qml</file>
+        <file>BrdManager.qml</file>
+        <file>FileManager.qml</file>
+        <file>DocumentTree.qml</file>
+        <file>PartSelector.qml</file>
+        <file>SchManager.qml</file>
+        <file>BrdEditor.qml</file>
+        <file>SchViewer.qml</file>
+        <file>SchExportDialog.qml</file>
+        <file>ETools.qml</file>
+        <file>LayerManager.qml</file>
+        <file>FolderList.qml</file>
+        <file>BomView.qml</file>
+    </qresource>
+</RCC>

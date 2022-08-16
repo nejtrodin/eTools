@@ -6,7 +6,8 @@ void ESchNet::setDomElement(QDomElement rootElement)
     m_validFlag = false;
     m_segments.clear();
 
-    if (!m_domElement.isNull() && m_domElement.tagName() == "net") {
+    // TODO: have bug with "bus". Create bus class.
+    if (!m_domElement.isNull() /*&& m_domElement.tagName() == "net"*/) {
         m_validFlag = true;
         m_name = m_domElement.attribute("name");
 

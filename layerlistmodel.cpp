@@ -72,10 +72,10 @@ void LayerListModel::setSettings(const SchSettings &settings)
 
     LayerPresset printPresset;
     printPresset.name = tr("For print");
-    printPresset.visibleLayers << settings.netsLayer
-                               << settings.bussesLayer
-                               << settings.symbolsLayer
-                               << settings.namesLayer;
+    printPresset.visibleLayers << SchSettings::netsLayer
+                               << SchSettings::bussesLayer
+                               << SchSettings::symbolsLayer
+                               << SchSettings::namesLayer;
     mLayerPressets.insert(printPresset.name, printPresset);
     emit pressetListChanged();
 }
@@ -95,7 +95,7 @@ void LayerListModel::selectPresset(QString pressetName)
     if (mLayerPressets.contains(pressetName)) {
         LayerPresset presset = mLayerPressets[pressetName];
         beginResetModel();
-        QVector<Layer>::iterator iLayer = mLayers.begin();
+        QList<Layer>::iterator iLayer = mLayers.begin();
         for(; iLayer != mLayers.end(); ++iLayer) {
             if (presset.visibleLayers.contains(iLayer->number))
                 iLayer->visible = true;

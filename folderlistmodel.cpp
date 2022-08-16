@@ -75,7 +75,7 @@ int FolderListModel::rowCount(const QModelIndex &parent) const
 void FolderListModel::remove(int index)
 {
     beginResetModel();
-    mPathList.remove(index);
+    mPathList.removeAt(index);
     endResetModel();
 }
 

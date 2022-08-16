@@ -125,9 +125,14 @@ HEADERS += \
     tools/efileinfo.h \
     tools/schexport.h
 
-RESOURCES += qml/qml.qrc \
-    fonts.qrc \
-    images.qrc
+equals(QT_MAJOR_VERSION, 5) {
+    RESOURCES += qml_qt5/qml.qrc \
+} else {
+    RESOURCES += qml/qml.qrc \
+}
+
+RESOURCES += fonts.qrc \
+    images.qrc \
 
 TRANSLATIONS += \
     eTools_ru_RU.ts

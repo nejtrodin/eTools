@@ -14,6 +14,14 @@
 class SchSettings
 {
 public:
+    enum {
+        netsLayer = 91,
+        bussesLayer = 92,
+        symbolsLayer = 94,
+        namesLayer = 95,
+        valuesLayer = 96,
+        };
+
     SchSettings();
 
     QFont font();
@@ -34,12 +42,6 @@ public:
     qreal padYOffset() const;
     qreal padTextSize() const;
     qreal labelUpOffset() const;
-
-    static const int netsLayer = 91;
-    static const int bussesLayer = 92;
-    static const int symbolsLayer = 94;
-    static const int namesLayer = 95;
-    static const int valuesLayer = 96;
 
 private:
     QFont mFont;

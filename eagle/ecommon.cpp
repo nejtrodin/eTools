@@ -157,6 +157,15 @@ double ECommon::textSizeToMilimeters(QString text, bool *ok)
 {
     double result = 0;
 
+#if QT_VERSION < 0x060000
+    if (text.right(2) == "mm") {
+        result = text.mid(0, text.size() - 2).toDouble(ok);
+    } else if (text.right(3) == "mil") {
+        result = 0.0254 * text.mid(0, text.size() - 3).toDouble(ok);
+    } else {
+        *ok = false;
+    }
+#else
     if (text.right(2) == "mm") {
         result = text.first(text.size() - 2).toDouble(ok);
     } else if (text.right(3) == "mil") {
@@ -164,6 +173,7 @@ double ECommon::textSizeToMilimeters(QString text, bool *ok)
     } else {
         *ok = false;
     }
+#endif
 
     return result;
 }
