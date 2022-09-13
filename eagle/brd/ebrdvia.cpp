@@ -52,25 +52,28 @@ void EBrdVia::update()
     double innerDiameter = m_diameter;
     double outerDiameter = m_diameter;
 
+    // DRC for Min preferred over fixed diameter
     if (designRules->isValid()) {
         if (m_diameter <= 0) {
             innerDiameter = m_drill + 2 * m_drill * designRules->getRvViaInner();
             outerDiameter = m_drill + 2 * m_drill * designRules->getRvViaOuter();
 
-            double minOuterDiameter = m_drill + 2 * designRules->getRlMinViaOuter();
             double maxOuterDiameter = m_drill + 2 * designRules->getRlMaxViaOuter();
-            if (outerDiameter < minOuterDiameter)
-                outerDiameter = minOuterDiameter;
-            else if (outerDiameter > maxOuterDiameter)
+            if (outerDiameter > maxOuterDiameter)
                 outerDiameter = maxOuterDiameter;
+
+            double maxInnerDiameter = m_drill + 2 * designRules->getRlMaxViaInner();
+            if (innerDiameter > maxInnerDiameter)
+                innerDiameter = maxInnerDiameter;
         }
 
+        double minOuterDiameter = m_drill + 2 * designRules->getRlMinViaOuter();
+        if (outerDiameter < minOuterDiameter)
+            outerDiameter = minOuterDiameter;
+
         double minInnerDiameter = m_drill + 2 * designRules->getRlMinViaInner();
-        double maxInnerDiameter = m_drill + 2 * designRules->getRlMaxViaInner();
         if (innerDiameter < minInnerDiameter)
             innerDiameter = minInnerDiameter;
-        else if (innerDiameter > maxInnerDiameter)
-            innerDiameter = maxInnerDiameter;
     }
 
     m_innerDiameter = innerDiameter;

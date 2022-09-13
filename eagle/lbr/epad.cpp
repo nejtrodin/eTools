@@ -53,33 +53,37 @@ void EPad::update()
     double innerDiameter = m_diameter;
     double bottomDiameter = m_diameter;
 
+    // DRC for Min preferred over fixed diameter
     if (designRules->isValid()) {
         if (m_diameter <= 0) {
             topDiameter = m_drill + 2 * m_drill * designRules->getRvPadTop();
             innerDiameter = m_drill + 2 * m_drill * designRules->getRvPadInner();
             bottomDiameter = m_drill + 2 * m_drill * designRules->getRvPadBottom();
+
+            double maxTopDiameter = m_drill + 2 * designRules->getRlMaxPadTop();
+            if (topDiameter > maxTopDiameter)
+                topDiameter = maxTopDiameter;
+
+            double maxBottomDiameter = m_drill + 2 * designRules->getRlMaxPadBottom();
+            if (bottomDiameter > maxBottomDiameter)
+                bottomDiameter = maxBottomDiameter;
+
+            double maxInnerDiameter = m_drill + 2 * designRules->getRlMaxPadInner();
+            if (innerDiameter > maxInnerDiameter)
+                innerDiameter = maxInnerDiameter;
         }
 
         double minTopDiameter = m_drill + 2 * designRules->getRlMinPadTop();
-        double maxTopDiameter = m_drill + 2 * designRules->getRlMaxPadTop();
         if (topDiameter < minTopDiameter)
             topDiameter = minTopDiameter;
-        else if (topDiameter > maxTopDiameter)
-            topDiameter = maxTopDiameter;
 
         double minBottomDiameter = m_drill + 2 * designRules->getRlMinPadBottom();
-        double maxBottomDiameter = m_drill + 2 * designRules->getRlMaxPadBottom();
         if (bottomDiameter < minBottomDiameter)
             bottomDiameter = minBottomDiameter;
-        else if (bottomDiameter > maxBottomDiameter)
-            bottomDiameter = maxBottomDiameter;
 
         double minInnerDiameter = m_drill + 2 * designRules->getRlMinPadInner();
-        double maxInnerDiameter = m_drill + 2 * designRules->getRlMaxPadInner();
         if (innerDiameter < minInnerDiameter)
             innerDiameter = minInnerDiameter;
-        else if (innerDiameter > maxInnerDiameter)
-            innerDiameter = maxInnerDiameter;
     }
 
     m_topDiameter = topDiameter;
